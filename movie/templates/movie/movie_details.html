@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+		<main class="content">
+			<div class="single">
+
+				<section class="trailer">
+					<h3>Trailer</h3>
+					<div class="trailer_frame">
+						<iframe width="560" height="315" src="{{movie.movie_trailer}}" frameborder="0" allowfullscreen></iframe>
+					</div>
+				</section>
+
+				<section class="movie">
+					<img src="{{movie.image.url}}">
+					<ul>
+						<li>{{movie.title}}</li>
+						<li>{{movie.description}}</li>
+						<li><a href="#">Adventure</a>, <a href="#">Drama</a>, <a href="#">Romance</a></li>
+						<li><a href="#">{{movie.cast}}</a></li>
+						<li>{{ movie.views_count }} Views</li>
+					</ul>
+				</section>
+				<section class="links">
+					<h3>Links</h3>
+					<ul class="dlinks">
+						<li><a>Download</a></li>
+						
+                        {% for link in links %}
+                            
+                            {% if link.link_type == "D" %}
+                                <li><a href="{{link.link}}">link{{forloop.counter}}</a></li>
+                            {% endif %}
+                                
+                           
+                        {% endfor %}
+                            
+					</ul>
+					<ul class="wlinks">
+						<li><a>Watch</a></li>
+                        
+                        {% for link in links %}
+                            
+                            {% if link.link_type == "W" %}
+                                <li><a href="{{link.link}}">link{{forloop.counter}}</a></li>
+                            {% endif %}
+                                
+                            
+                        {% endfor %}
+                            
+					</ul>
+				</section>
+
+				<section class="related">
+					<h3>Related movies</h3>
+					{% for related_movie in related_movies %}
+						<div class="relatemovie">
+							<a href="{% url 'movie:movie_details' related_movie.id %}"><img src="{{related_movie.image.url}}"></a>
+							<a href="{% url 'movie:movie_details' related_movie.id %}"><span class="relatedname">{{related_movie.title}}</span></a>
+						</div>
+					{% endfor %}
+				</section>
+
+
+			</div>
+		</main>
+
+{% endblock content %}
