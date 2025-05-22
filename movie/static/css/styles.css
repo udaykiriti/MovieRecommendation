@@ -173,6 +173,7 @@ body{font-family: arial,sans-serif; background-color: #191919; position: relativ
 	.relatemovie{float: left;width: calc(33.3% - 15px); margin: 0 5px 10px 10px; position: relative;}
 }
 
+
 @media all and (max-width: 540px){
 	.mov{ width: calc(33.3% - 10px);padding:10px 5px 0 5px;}
 	.movietitle{right: 5px;left:5px;}
