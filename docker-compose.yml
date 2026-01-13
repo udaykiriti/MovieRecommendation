@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+    stdin_open: true
+    tty: true
+
+volumes:
+  static_volume:
+  media_volume:
