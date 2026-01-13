@@ -20,12 +20,26 @@
 						<li style="display: flex; align-items: center; justify-content: space-between;">
                             <span>{{movie.title}}</span>
                             {% if user.is_authenticated %}
-                                <a href="{% url 'movie:toggle_favorite' movie.id %}" class="fav-btn" title="Toggle Favorite">
-                                    {% if is_favorited %}
-                                        <span style="color: #c22026; font-size: 24px;">♥</span>
-                                    {% else %}
-                                        <span style="color: #666; font-size: 24px;">♡</span>
-                                    {% endif %}
+                                <a href="javascript:void(0);" 
+                                   class="fav-btn" 
+                                   title="Toggle Favorite"
+                                   hx-post="{% url 'movie:toggle_favorite' movie.id %}"
+                                   hx-trigger="click"
+                                   hx-target="this"
+                                   hx-swap="innerHTML"
+                                   hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                    {% include 'partials/favorite_icon.html' %}
+                                </a>
+                                <a href="javascript:void(0);" 
+                                   class="watchlist-btn" 
+                                   title="Toggle Watchlist"
+                                   hx-post="{% url 'movie:toggle_watchlist' movie.id %}"
+                                   hx-trigger="click"
+                                   hx-target="this"
+                                   hx-swap="innerHTML"
+                                   hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                   style="margin-left: 10px; background: #333; padding: 5px 10px; border-radius: 4px; display: inline-flex; align-items: center; text-decoration: none;">
+                                    {% include 'partials/watchlist_icon.html' %}
                                 </a>
                             {% endif %}
                         </li>
@@ -72,7 +86,9 @@
                         {% for comment in comments %}
                             <div class="comment-item" style="border-bottom: 1px solid #333; padding: 15px 0;">
                                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                                    <strong style="color: #fff;">{{ comment.user.username }}</strong>
+                                    <a href="{% url 'movie:public_profile' comment.user.username %}" style="text-decoration: none; color: inherit;">
+                                        <strong style="color: #fff; transition: color 0.3s;">{{ comment.user.username }}</strong>
+                                    </a>
                                     <span style="color: #666; font-size: 12px;">{{ comment.created_at|timesince }} ago</span>
                                 </div>
                                 <p style="color: #ddd; font-size: 14px; line-height: 1.5;">{{ comment.text }}</p>
@@ -85,12 +101,14 @@
 
 				<section class="related">
 					<h3>Related movies</h3>
-					{% for related_movie in related_movies %}
-						<div class="relatemovie">
-							<a href="{% url 'movie:movie_details' related_movie.id %}"><img src="{{related_movie.image.url}}"></a>
-							<a href="{% url 'movie:movie_details' related_movie.id %}"><span class="relatedname">{{related_movie.title}}</span></a>
-						</div>
-					{% endfor %}
+					<div class="related-grid">
+						{% for related_movie in related_movies %}
+							<div class="relatemovie">
+								<a href="{% url 'movie:movie_details' related_movie.id %}"><img src="{{related_movie.image.url}}"></a>
+								<a href="{% url 'movie:movie_details' related_movie.id %}"><span class="relatedname">{{related_movie.title}}</span></a>
+							</div>
+						{% endfor %}
+					</div>
 				</section>
 
 

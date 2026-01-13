@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile_user.username }}'s Profile - CineStream{% endblock %}
+
+{% block content %}
+<main class="content">
+    <div class="auth-container" style="max-width: 800px;">
+        
+        <div style="text-align: center; margin-bottom: 40px;">
+            <div style="width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden; border: 4px solid #c22026;">
+                {% if profile_user.profile.image %}
+                    <img src="{{ profile_user.profile.image.url }}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                    <div style="width: 100%; height: 100%; background: #333;"></div>
+                {% endif %}
+            </div>
+            <h2 style="color: #fff; font-size: 2rem; margin-bottom: 5px;">{{ profile_user.username }}</h2>
+            <p style="color: #aaa;">Joined {{ profile_user.date_joined|date:"F Y" }}</p>
+            
+            {% if profile_user.profile.bio %}
+                <div style="margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; color: #ddd;">
+                    "{{ profile_user.profile.bio }}"
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Favorites Section -->
+        <div style="margin-top: 50px; border-top: 1px solid #333; padding-top: 30px;">
+            <h3 style="color: #fff; margin-bottom: 20px; font-size: 20px; border-left: 4px solid #c22026; padding-left: 10px;">Favorites</h3>
+            {% if profile_user.profile.favorites.exists %}
+                <div class="movies" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+                    {% for movie in profile_user.profile.favorites.all %}
+                        <div class="mov">
+                            <a href="{% url 'movie:movie_details' movie.id %}">
+                                <img src="{{ movie.image.url }}" alt="{{ movie.title }}" style="height: 225px;">
+                                <h2 class="movietitle" style="font-size: 0.8rem;">{{ movie.title }}</h2>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: #777;">No favorites yet.</p>
+            {% endif %}
+        </div>
+        
+        <!-- Watchlist Section -->
+        <div style="margin-top: 50px; border-top: 1px solid #333; padding-top: 30px;">
+            <h3 style="color: #fff; margin-bottom: 20px; font-size: 20px; border-left: 4px solid #4caf50; padding-left: 10px;">Watchlist</h3>
+            {% if profile_user.profile.watchlist.exists %}
+                <div class="movies" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+                    {% for movie in profile_user.profile.watchlist.all %}
+                        <div class="mov">
+                            <a href="{% url 'movie:movie_details' movie.id %}">
+                                <img src="{{ movie.image.url }}" alt="{{ movie.title }}" style="height: 225px;">
+                                <h2 class="movietitle" style="font-size: 0.8rem;">{{ movie.title }}</h2>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: #777;">Watchlist is empty.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</main>
+{% endblock %}

@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}My Profile - MovieRecommendation{% endblock %}
+{% block title %}My Profile - CineStream{% endblock %}
 
 {% block content %}
 <main class="content">
-    <div class="auth-container" style="max-width: 600px;">
+    <div class="auth-container" style="max-width: 800px;">
         <h2>My Profile</h2>
         
         {% if messages %}
@@ -15,37 +15,87 @@
             </div>
         {% endif %}
 
-        <div style="display: flex; align-items: center; gap: 30px; margin-bottom: 30px;">
-            <div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid #c22026;">
-                {% if user.profile.image %}
-                    <img src="{{ user.profile.image.url }}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover;">
-                {% else %}
-                    <div style="width: 100%; height: 100%; background: #333;"></div>
-                {% endif %}
-            </div>
-            <div>
+        <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-bottom: 30px;">
+            <!-- Profile Info & Image -->
+            <div style="flex: 1; min-width: 250px; text-align: center;">
+                <div style="width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden; border: 4px solid #c22026;">
+                    {% if user.profile.image %}
+                        <img src="{{ user.profile.image.url }}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                        <div style="width: 100%; height: 100%; background: #333;"></div>
+                    {% endif %}
+                </div>
                 <h3 style="color: #fff; font-size: 24px; margin-bottom: 5px;">{{ user.username }}</h3>
                 <p style="color: #aaa;">{{ user.email }}</p>
                 <p style="color: #666; font-size: 12px; margin-top: 5px;">Member since {{ user.date_joined|date:"M Y" }}</p>
+                
+                <div style="margin-top: 20px; text-align: left; background: #2b2b2b; padding: 15px; border-radius: 4px;">
+                    <strong style="color: #fff; display: block; margin-bottom: 5px;">Bio</strong>
+                    <p style="color: #ddd; font-size: 0.9rem; line-height: 1.5;">{{ user.profile.bio|default:"No bio yet." }}</p>
+                </div>
+            </div>
+
+            <!-- Edit Form -->
+            <div style="flex: 1.5; min-width: 300px;">
+                <form method="POST" enctype="multipart/form-data" style="background: #252525; padding: 20px; border-radius: 8px;">
+                    {% csrf_token %}
+                    <h4 style="color: #fff; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px;">Edit Profile</h4>
+                    
+                    <div style="display: flex; gap: 15px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>First Name</label>
+                            <input type="text" name="first_name" value="{{ user.first_name }}">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Last Name</label>
+                            <input type="text" name="last_name" value="{{ user.last_name }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" value="{{ user.email }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea name="bio" rows="4" style="width: 100%; padding: 10px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px;">{{ user.profile.bio }}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Profile Picture</label>
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" style="width: auto; padding: 10px 25px; cursor: pointer;">Save Changes</button>
+                </form>
             </div>
         </div>
 
-        <form method="POST" enctype="multipart/form-data" style="border-top: 1px solid #333; padding-top: 20px;">
-            {% csrf_token %}
-            <h4 style="color: #fff; margin-bottom: 15px;">Update Profile Picture</h4>
-            
-            <div class="form-group">
-                <input type="file" name="image" accept="image/*">
-                <small class="form-help">Recommended size: Square, at least 200x200px.</small>
-            </div>
-            
-            <button type="submit" class="btn-primary" style="width: auto; padding: 10px 25px; cursor: pointer;">Update Picture</button>
-        </form>
-
+        <!-- Watchlist Section -->
         <div style="margin-top: 50px; border-top: 1px solid #333; padding-top: 30px;">
-            <h3 style="color: #fff; margin-bottom: 20px; font-size: 20px;">My Favorite Movies</h3>
+            <h3 style="color: #fff; margin-bottom: 20px; font-size: 20px; border-left: 4px solid #4caf50; padding-left: 10px;">My Watchlist</h3>
+            {% if user.profile.watchlist.exists %}
+                <div class="movies" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+                    {% for movie in user.profile.watchlist.all %}
+                        <div class="mov">
+                            <a href="{% url 'movie:movie_details' movie.id %}">
+                                <img src="{{ movie.image.url }}" alt="{{ movie.title }}" style="height: 225px;">
+                                <h2 class="movietitle" style="font-size: 0.8rem;">{{ movie.title }}</h2>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: #777;">Your watchlist is empty.</p>
+            {% endif %}
+        </div>
+
+        <!-- Favorites Section -->
+        <div style="margin-top: 50px; border-top: 1px solid #333; padding-top: 30px;">
+            <h3 style="color: #fff; margin-bottom: 20px; font-size: 20px; border-left: 4px solid #c22026; padding-left: 10px;">My Favorites</h3>
             {% if user.profile.favorites.exists %}
-                <div class="movies" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));">
+                <div class="movies" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
                     {% for movie in user.profile.favorites.all %}
                         <div class="mov">
                             <a href="{% url 'movie:movie_details' movie.id %}">

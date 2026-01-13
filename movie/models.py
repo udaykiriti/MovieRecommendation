@@ -96,7 +96,9 @@ class MovieLinks(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    bio = models.TextField(blank=True, null=True)
     favorites = models.ManyToManyField(Movie, blank=True, related_name='favorited_by')
+    watchlist = models.ManyToManyField(Movie, blank=True, related_name='watchlisted_by')
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -119,4 +121,7 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    if hasattr(instance, 'profile'):
+        instance.profile.save()
+    else:
+        Profile.objects.create(user=instance)

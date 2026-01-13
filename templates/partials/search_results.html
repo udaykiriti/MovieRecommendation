@@ -1,0 +1,22 @@
+{% if results %}
+    <ul class="search-dropdown">
+        {% for movie in results %}
+            <li>
+                <a href="{% url 'movie:movie_details' movie.id %}" class="search-result-item">
+                    <img src="{{ movie.image.url }}" alt="{{ movie.title }}" class="search-result-img">
+                    <div class="search-result-info">
+                        <span class="search-result-title">{{ movie.title }}</span>
+                        <span class="search-result-year">{{ movie.year_of_production|date:"Y" }}</span>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+        <li class="search-more">
+            <a href="{% url 'movie:movie' %}?q={{ query }}">View all results</a>
+        </li>
+    </ul>
+{% elif query %}
+    <div class="search-dropdown no-results">
+        <p>No movies found.</p>
+    </div>
+{% endif %}

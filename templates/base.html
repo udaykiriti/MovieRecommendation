@@ -3,22 +3,25 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>{% block title %}MovieRecommendation - Watch Latest Trailers{% endblock title %}</title>
+	<title>{% block title %}CineStream - Watch Latest Trailers{% endblock title %}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <meta name="description" content="Watch the latest movie trailers, find download links, and explore your favorite genres in high quality.">
     <meta name="keywords" content="movies, trailers, watch movies, cinema, action movies, drama, romance, comedy">
-    <meta name="author" content="MovieRecommendation Team">
+    <meta name="author" content="CineStream Team">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:title" content="MovieRecommendation - Watch Latest Trailers">
+    <meta property="og:title" content="CineStream - Watch Latest Trailers">
     <meta property="og:description" content="Explore a wide range of movie trailers and details.">
-    <meta property="og:image" content="{% static 'img/logo.png' %}">
+    <meta property="og:image" content="{% static 'img/logo.svg' %}">
 
 	<!-- Link Swiper's CSS -->
 	<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
 	<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 	<script src="{% static 'js/script.js' %}"></script>
@@ -38,7 +41,7 @@
     <div id="toast-container"></div>
 
 		<header class="header">
-			<figure class="logo"><a href="/"><img src="{% static 'img/logo.png' %}" alt="Logo"></figure></a>
+			<figure class="logo"><a href="/"><img src="{% static 'img/logo.svg' %}" alt="CineStream Logo"></a></figure>
 			<nav class="menu">
 				<ul>
 					<li><a href="/">Home</a></li>
@@ -66,10 +69,22 @@
 			</nav>
 
             <div style="display: flex; align-items: center; gap: 15px;">
-                <form class="search" method="GET" action="{% url 'movie:movie' %}">
-                    <input type="text" name="q" value="{{request.GET.q}}" class="searchfield" placeholder="Search..." style="color: #FFF;">
-                    <input type="submit" value="" class="searchsubmit">
-                </form>
+                <div class="search-container">
+                    <form class="search" method="GET" action="{% url 'movie:movie' %}">
+                        <input type="text" 
+                               name="q" 
+                               value="{{request.GET.q}}" 
+                               class="searchfield" 
+                               placeholder="Search..." 
+                               style="color: #FFF;"
+                               autocomplete="off"
+                               hx-get="{% url 'movie:search_results' %}"
+                               hx-trigger="keyup changed delay:500ms"
+                               hx-target="#search-results">
+                        <input type="submit" value="" class="searchsubmit">
+                    </form>
+                    <div id="search-results"></div>
+                </div>
 
                 {% if user.is_authenticated %}
                     <div class="user-info" style="color: #fff; font-size: 14px; display: flex; align-items: center; gap: 15px;">
@@ -288,6 +303,16 @@
             {% endif %}
 		</script>
 
+
+    <!-- Trailer Modal -->
+    <div id="trailerModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="video-container">
+                <iframe id="trailerFrame" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 
 	</div>
 </body>
