@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Login - MovieRecommendation{% endblock %}
+{% block title %}Login - CineStream{% endblock %}
 
 {% block content %}
-<main class="content">
-    <div class="auth-container">
-        <h2>Login</h2>
+<div class="auth-page-wrapper">
+    <div class="auth-glass-card">
+        <div class="auth-icon-header">
+            <span class="material-icons-round">account_circle</span>
+        </div>
+        <h2>Welcome Back</h2>
+        <p class="auth-subtitle">Login to your CineStream account</p>
         
         {% if messages %}
             <div class="messages">
@@ -17,20 +21,42 @@
 
         <form method="POST">
             {% csrf_token %}
-            <div class="form-group">
+            <div class="cool-form-group">
                 <label>Username</label>
-                <input type="text" name="username" required placeholder="Enter your username">
+                <input type="text" id="usernameInput" name="username" class="cool-input" required placeholder="Enter your username" autocomplete="off">
             </div>
-            <div class="form-group">
+            <div class="cool-form-group">
                 <label>Password</label>
-                <input type="password" name="password" required placeholder="Enter your password">
+                <input type="password" id="passwordInput" name="password" class="cool-input" required placeholder="Enter your password">
             </div>
-            <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer; margin-top: 10px; padding: 14px;">Login</button>
+            
+            <button type="submit" class="cool-btn" style="width: 100%; margin-top: 10px;">
+                <span>Sign In</span>
+            </button>
         </form>
         
-        <div class="auth-footer">
-            Don't have an account? <a href="{% url 'movie:signup' %}">Sign Up</a>
+        <div class="auth-extra-links">
+            New here? <a href="{% url 'movie:signup' %}">Create an account</a>
         </div>
     </div>
-</main>
+</div>
+
+<style>
+    /* Google-inspired header icon */
+    .auth-icon-header {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .auth-icon-header .material-icons-round {
+        font-size: 40px;
+        color: var(--primary-color);
+    }
+</style>
 {% endblock %}

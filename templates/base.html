@@ -3,18 +3,24 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>{% block title %}CineStream - Watch Latest Trailers{% endblock title %}</title>
+	<title>{% block title %}GrandLine Cinema - The Pirate Movie Hub{% endblock title %}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-    <meta name="description" content="Watch the latest movie trailers, find download links, and explore your favorite genres in high quality.">
-    <meta name="keywords" content="movies, trailers, watch movies, cinema, action movies, drama, romance, comedy">
-    <meta name="author" content="CineStream Team">
+    <meta name="description" content="Join the Straw Hat crew and explore the Grand Line of movie trailers.">
+    <meta name="keywords" content="movies, trailers, one piece, anime, grandline, pirates">
+    <meta name="author" content="GrandLine Cinema Crew">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:title" content="CineStream - Watch Latest Trailers">
-    <meta property="og:description" content="Explore a wide range of movie trailers and details.">
+    <meta property="og:title" content="GrandLine Cinema - The Pirate Movie Hub">
+    <meta property="og:description" content="The ultimate movie treasure hunt.">
     <meta property="og:image" content="{% static 'img/logo.svg' %}">
+
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
 	<!-- Link Swiper's CSS -->
 	<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
@@ -29,11 +35,27 @@
 
 </head>
 <body>
-    <!-- Preloader -->
+    <!-- Modern Preloader -->
     <div id="preloader">
-        <div class="film-loader">
-            <div class="reel"></div>
-            <p>Loading...</p>
+        <div class="loader-content">
+            <div class="reel-container">
+                <div class="cool-reel"></div>
+                <div class="cool-reel-inner"></div>
+            </div>
+            <div class="loader-text">
+                <span class="letter">G</span>
+                <span class="letter">R</span>
+                <span class="letter">A</span>
+                <span class="letter">N</span>
+                <span class="letter">D</span>
+                <span class="letter">L</span>
+                <span class="letter">I</span>
+                <span class="letter">N</span>
+                <span class="letter">E</span>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar"></div>
+            </div>
         </div>
     </div>
 	<div class="wrapper">
@@ -46,55 +68,62 @@
 				<ul>
 					<li><a href="/">Home</a></li>
                     <li><a href="{% url 'movie:tv_shows' %}">TV Shows</a></li>
-					<li><a>Genres</a>
+					<li class="has-dropdown"><a href="javascript:void(0);">Genres</a>
 						<ul>
                             {% for category in categories_list %}
 							    <li><a href="{% url 'movie:filter_by_category' category.name|lower %}">{{ category.name|title }}</a></li>
                             {% endfor %}
 						</ul>
 					</li>
-					<li><a>Language</a>
+					<li class="has-dropdown"><a href="javascript:void(0);">Language</a>
 						<ul>
 							<li><a href="{% url 'movie:filter_by_language' 'english' %}">English</a></li>
 							<li><a href="{% url 'movie:filter_by_language' 'german' %}">German</a></li>
 						</ul>
 					</li>
-					<li class="mobsearch">
-						<form class="mobform" method="GET">
-							<input type="text" name="query" value="" class="mobsearchfield" placeholder="Search...">
-							<input type="submit" value="" class="mobsearchsubmit">
-						</form>
-					</li>
+                    <li>
+                        <a href="javascript:void(0);" class="surprise-btn" onclick="startSurpriseMachine()">
+                            <span class="material-icons-round" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">auto_awesome</span> Surprise
+                        </a>
+                    </li>
 				</ul>
 			</nav>
 
             <div style="display: flex; align-items: center; gap: 15px;">
                 <div class="search-container">
                     <form class="search" method="GET" action="{% url 'movie:movie' %}">
-                        <input type="text" 
-                               name="q" 
-                               value="{{request.GET.q}}" 
-                               class="searchfield" 
-                               placeholder="Search..." 
-                               style="color: #FFF;"
-                               autocomplete="off"
-                               hx-get="{% url 'movie:search_results' %}"
-                               hx-trigger="keyup changed delay:500ms"
-                               hx-target="#search-results">
-                        <input type="submit" value="" class="searchsubmit">
+                        <div class="search-input-wrapper" style="display: flex; align-items: center; width: 100%;">
+                            <span class="material-icons-round" style="color: rgba(255,255,255,0.5); font-size: 20px; margin-right: 10px;">search</span>
+                            <input type="text" 
+                                   id="main-search"
+                                   name="q" 
+                                   value="{{request.GET.q}}" 
+                                   class="searchfield" 
+                                   placeholder="Search movies..." 
+                                   style="color: #FFF; background: transparent; border: none; outline: none; width: 100%;"
+                                   autocomplete="off"
+                                   hx-get="{% url 'movie:search_results' %}"
+                                   hx-trigger="keyup changed delay:500ms"
+                                   hx-target="#search-results">
+                            <button type="button" class="voice-search-btn" onclick="startVoiceSearch()" style="background: transparent; border: none; color: rgba(255,255,255,0.5); cursor: pointer; display: flex; align-items: center;">
+                                <span class="material-icons-round">mic</span>
+                            </button>
+                        </div>
                     </form>
                     <div id="search-results"></div>
                 </div>
 
                 {% if user.is_authenticated %}
-                    <div class="user-info" style="color: #fff; font-size: 14px; display: flex; align-items: center; gap: 15px;">
-                        <a href="{% url 'movie:profile' %}" style="display: flex; align-items: center; gap: 8px;">
-                            <div style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; border: 2px solid #c22026;">
-                                <img src="{{ user.profile.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="user-info">
+                        <a href="{% url 'movie:profile' %}" class="user-profile-chip">
+                            <div class="avatar-mini">
+                                <img src="{{ user.profile.image.url }}">
                             </div>
-                            <span style="color: #aaa;">Hi, <strong style="color: #fff;">{{ user.username }}</strong></span>
+                            <span>{{ user.username }}</span>
                         </a>
-                        <a href="{% url 'movie:logout' %}" class="logout-link" style="color: #c22026; font-weight: bold; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">Logout</a>
+                        <a href="{% url 'movie:logout' %}" class="logout-icon-btn" title="Logout">
+                            <span class="material-icons-round">logout</span>
+                        </a>
                     </div>
                 {% else %}
                     <div class="auth-links" style="display: flex; gap: 12px; align-items: center;">
@@ -106,26 +135,53 @@
 
 			<div class="toggle"><img src="{% static 'img/menu.svg' %}"></div>
 		</header>
-		<!-- Swiper -->
+		<!-- Modern Hero Slider -->
+        {% if slider_movies or movie %}
 		<div class="homeslider">
 			<div class="swiper-container">
-
 				<div class="swiper-wrapper">
-						<div class="swiper-slide">
-								<img src="{{movie.banner.url}}">
-							<div class="caption">
-								<div class="captioninside">
-									<h3 style="color: #FFF; font-weight:bold; margin-bottom: 10px">{{movie.title}}</h3>
-									<p style="line-height: 1.6;">{{movie.description}}</p>
-									<a href="{% url 'movie:movie_details' movie.id %}" class="playbutton">Play</a>
-								</div>
-							</div>
-						</div>
+                    {% if slider_movies %}
+                        {% for mov in slider_movies %}
+                            <div class="swiper-slide">
+                                <!-- Ambient Glow Layer -->
+                                <div class="ambient-glow" style="background-image: url('{{mov.banner.url}}');"></div>
+                                
+                                <img src="{{mov.banner.url}}" class="hero-img">
+                                <div class="caption">
+                                    <div class="captioninside">
+                                        <div class="hero-badge">Featured</div>
+                                        <h3 class="hero-title">{{mov.title}}</h3>
+                                        <p class="hero-desc">{{mov.description|truncatewords:30}}</p>
+                                        <a href="{% url 'movie:movie_details' mov.id %}" class="playbutton">
+                                            <span class="play-icon">▶</span> Watch Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% elif movie %}
+                        <div class="swiper-slide">
+                            <!-- Ambient Glow Layer -->
+                            <div class="ambient-glow" style="background-image: url('{{movie.banner.url}}');"></div>
+                            
+                            <img src="{{movie.banner.url}}" class="hero-img">
+                            <div class="caption">
+                                <div class="captioninside">
+                                    <div class="hero-badge">Featured</div>
+                                    <h3 class="hero-title">{{movie.title}}</h3>
+                                    <p class="hero-desc">{{movie.description|truncatewords:30}}</p>
+                                    <a href="{% url 'movie:movie_details' movie.id %}" class="playbutton">
+                                        <span class="play-icon">▶</span> Watch Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
 				</div>
-				<!-- Add Pagination -->
 				<div class="swiper-pagination"></div>
 			</div>
 		</div>
+        {% endif %}
 
         
         {% block content %}
@@ -311,6 +367,22 @@
             <div class="video-container">
                 <iframe id="trailerFrame" src="" frameborder="0" allowfullscreen></iframe>
             </div>
+        </div>
+    </div>
+
+    <!-- Surprise Slot Machine Modal -->
+    <div id="surpriseModal" class="surprise-modal">
+        <div class="surprise-content">
+            <div class="slot-machine-container">
+                <div class="slot-window">
+                    <div id="slot-reel" class="slot-reel">
+                        <!-- Posters will be injected here -->
+                    </div>
+                </div>
+                <div class="slot-pointer">◀</div>
+            </div>
+            <h2 id="surprise-title">Picking your next movie...</h2>
+            <p id="surprise-subtitle">Spinning the reels of CineStream</p>
         </div>
     </div>
 

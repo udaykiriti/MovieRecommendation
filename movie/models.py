@@ -58,6 +58,8 @@ class Movie(models.Model):
     movie_trailer = models.URLField()
     created = models.DateTimeField(default=datetime.now)
     slug = models.SlugField(blank=True, null=True)
+    tmdb_id = models.IntegerField(unique=True, blank=True, null=True)
+    rating = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
     
 
     def save(self , *args , **kwargs):

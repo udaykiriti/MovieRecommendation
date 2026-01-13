@@ -1,32 +1,36 @@
 {% extends 'base.html' %}
 
-{% block title %}Contact Us - MovieRecommendation{% endblock %}
+{% block title %}Contact Us - CineStream{% endblock %}
 
 {% block content %}
 <main class="content">
-    <div class="auth-container" style="max-width: 600px;">
-        <h2>Contact Us</h2>
-        <p style="text-align: center; color: #aaa; margin-bottom: 30px;">
-            Have questions, suggestions, or just want to say hello? Drop us a message below!
-        </p>
-        
-        <form method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" name="name" required placeholder="Your Name" value="{{ user.username }}">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required placeholder="Your Email" value="{{ user.email }}">
-            </div>
-            <div class="form-group">
-                <label>Message</label>
-                <textarea name="message" required placeholder="Your Message" style="width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; outline: none; min-height: 150px;"></textarea>
-            </div>
+    <div class="auth-page-wrapper" style="padding-top: 50px;">
+        <div class="auth-glass-card" style="max-width: 600px;">
+            <h2>Contact Us</h2>
+            <p class="auth-subtitle">
+                Have questions, suggestions, or just want to say hello? Drop us a message below!
+            </p>
             
-            <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer; padding: 14px;">Send Message</button>
-        </form>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="cool-form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" class="cool-input" required placeholder="Your Name" value="{{ user.username }}">
+                </div>
+                <div class="cool-form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" class="cool-input" required placeholder="Your Email" value="{{ user.email }}">
+                </div>
+                <div class="cool-form-group">
+                    <label>Message</label>
+                    <textarea name="message" class="cool-input" required placeholder="Your Message" rows="5"></textarea>
+                </div>
+                
+                <button type="submit" class="cool-btn" style="width: 100%;">
+                    <span>Send Message</span>
+                </button>
+            </form>
+        </div>
     </div>
 </main>
 {% endblock %}

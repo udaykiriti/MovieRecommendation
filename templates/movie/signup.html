@@ -1,11 +1,122 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up - MovieRecommendation{% endblock %}
+{% block title %}Sign Up - CineStream{% endblock %}
 
 {% block content %}
-<main class="content">
-    <div class="auth-container">
-        <h2>Create Account</h2>
+<style>
+    /* --- Signup Clapperboard Animation --- */
+    .clapper-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: -40px;
+        position: relative;
+        z-index: 20;
+    }
+
+    .clapperboard {
+        width: 120px;
+        height: 100px; /* Overall height including stick */
+        position: relative;
+        transform: rotate(-10deg);
+        transition: transform 0.3s ease;
+    }
+
+    .clapperboard:hover {
+        transform: rotate(0deg) scale(1.1);
+    }
+
+    .cb-top {
+        width: 120px;
+        height: 25px;
+        background: #2b2b2b;
+        border: 2px solid #fff;
+        border-radius: 4px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: bottom left;
+        transform: rotate(-20deg);
+        animation: clap 3s infinite;
+        display: flex;
+        overflow: hidden;
+    }
+
+    .cb-bottom {
+        width: 120px;
+        height: 70px;
+        background: #2b2b2b;
+        border: 2px solid #fff;
+        border-radius: 0 0 4px 4px;
+        position: absolute;
+        top: 25px;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-family: monospace;
+        font-size: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    /* Stripes */
+    .stripe {
+        width: 20px;
+        height: 100%;
+        background: #fff;
+        transform: skewX(-20deg);
+        margin: 0 10px;
+    }
+
+    .cb-top .stripe { margin: 0 8px; }
+
+    @keyframes clap {
+        0%, 10%, 100% { transform: rotate(0deg); }
+        5% { transform: rotate(-25deg); }
+    }
+
+    .cb-text {
+        text-align: center;
+        opacity: 0.8;
+    }
+    .cb-text span {
+        display: block;
+        margin-bottom: 2px;
+    }
+    
+    .scene-text {
+        font-size: 14px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-top: 5px;
+    }
+
+</style>
+
+<div class="auth-page-wrapper">
+    
+    <!-- Animated Clapperboard -->
+    <div class="clapper-wrapper">
+        <div class="clapperboard">
+            <div class="cb-top">
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+            </div>
+            <div class="cb-bottom">
+                <div class="cb-text">
+                    <span>PROD: CINESTREAM</span>
+                    <span>SCENE: SIGNUP</span>
+                </div>
+                <div class="scene-text">TAKE 1</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-glass-card" style="margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0;">
+        <h2>Join the Crew</h2>
+        <p class="auth-subtitle">Start your movie adventure today</p>
         
         {% if messages %}
             <div class="messages">
@@ -19,12 +130,12 @@
             {% csrf_token %}
             
             {% for field in form %}
-                <div class="form-group">
+                <div class="cool-form-group">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
                     
                     {% if field.errors %}
-                        <ul class="form-errors">
+                        <ul class="cool-error-list">
                             {% for error in field.errors %}
                                 <li>{{ error }}</li>
                             {% endfor %}
@@ -32,28 +143,19 @@
                     {% endif %}
                     
                     {% if field.help_text %}
-                        <small class="form-help">{{ field.help_text|safe }}</small>
+                        <small class="form-help" style="margin-left: 5px; opacity: 0.5; font-size: 0.8rem; display: block; margin-top: 5px;">{{ field.help_text|safe }}</small>
                     {% endif %}
                 </div>
             {% endfor %}
             
-            <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer; margin-top: 10px; padding: 14px;">Register</button>
+            <button type="submit" class="cool-btn" style="width: 100%;">
+                <span>Create Account</span>
+            </button>
         </form>
         
-        <div class="auth-footer">
-            Already have an account? <a href="{% url 'movie:login' %}">Login</a>
+        <div class="auth-extra-links">
+            Already have an account? <a href="{% url 'movie:login' %}">Login Here</a>
         </div>
     </div>
-</main>
-
-<style>
-    /* Specific overrides for Django form widgets */
-    .form-group input {
-        display: block;
-    }
-    /* Hide the default password help text which is usually too long and technical */
-    .form-group:nth-child(n+3) .form-help ul {
-        display: none;
-    }
-</style>
+</div>
 {% endblock %}

@@ -23,7 +23,9 @@ def movies(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    return render(request, "movie/movie_list.html", {'page_obj': page_obj})
+    slider_movies = Movie.objects.all().order_by('-created')[:5]
+    
+    return render(request, "movie/movie_list.html", {'page_obj': page_obj, 'slider_movies': slider_movies})
 
 def movie_details(request, _id):
     movie = get_object_or_404(Movie, pk=_id)
@@ -218,3 +220,25 @@ def search_results(request):
         results = Movie.objects.filter(title__icontains=query)[:5]
     
     return render(request, 'partials/search_results.html', {'results': results, 'query': query})
+
+def random_movie_data(request):
+    """Returns random movie posters and one final winner for the slot machine."""
+    import random
+    all_movies = list(Movie.objects.all())
+    if len(all_movies) < 5:
+        return JsonResponse({"error": "Not enough movies"}, status=400)
+    
+    # Selection for the reel (15 posters)
+    reel_movies = random.sample(all_movies, min(len(all_movies), 15))
+    winner = random.choice(all_movies)
+    
+    data = {
+        "reel": [{"image": m.image.url} for m in reel_movies],
+        "winner": {
+            "title": winner.title,
+            "url": f"/{winner.id}/",
+            "image": winner.image.url
+        }
+    }
+    return JsonResponse(data)
+

@@ -1,11 +1,14 @@
-<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background (optional, keeping it transparent for easy overlay) -->
+<svg width="240" height="70" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg">
+  <!-- Luffy's Straw Hat Icon -->
+  <g transform="translate(5, 5)">
+    <ellipse cx="30" cy="45" rx="28" ry="12" fill="#f1c40f" stroke="#b8860b" stroke-width="2"/>
+    <path d="M12 42C12 25 20 15 30 15S48 25 48 42" fill="#f1c40f" stroke="#b8860b" stroke-width="2"/>
+    <path d="M12 38C12 38 20 34 30 34S48 38 48 38V42H12V38Z" fill="#c22026"/>
+  </g>
   
-  <!-- Icon: A play button inside a film reel shape -->
-  <circle cx="35" cy="30" r="22" fill="#c22026" />
-  <circle cx="35" cy="30" r="18" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="4 2" />
-  <polygon points="28,20 28,40 45,30" fill="#fff" />
-
-  <!-- Text: CineStream -->
-  <text x="65" y="38" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" letter-spacing="1">Cine<tspan fill="#c22026">Stream</tspan></text>
+  <!-- Text: GrandLine Cinema -->
+  <text x="75" y="42" font-family="'Courier New', Courier, monospace" font-size="24" font-weight="900" fill="#f1c40f" letter-spacing="1">
+    GRAND<tspan fill="#fff">LINE</tspan>
+    <tspan x="75" y="62" font-size="14" fill="#c22026" letter-spacing="4">CINEMA</tspan>
+  </text>
 </svg>

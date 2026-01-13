@@ -5,19 +5,29 @@
 {% block content %}
 		<main class="content">
 			<section class="centered">
+                <!-- Category Chips -->
+                <div class="chips-container">
+                    <a href="/" class="chip {% if not request.resolver_match.kwargs.category %}active{% endif %}">All Movies</a>
+                    {% for category in categories_list %}
+                        <a href="{% url 'movie:filter_by_category' category.name|lower %}" 
+                           class="chip {% if request.resolver_match.kwargs.category == category.name|lower %}active{% endif %}">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+
 				<div class="movies">
                     {% for movie in page_obj %}
                         <div class="mov">
                             <a href="{% url 'movie:movie_details' movie.id %}">
                                 <img src="{{movie.image.url}}">
-                                <span class="movie-year">{{movie.year_of_production|date:"Y"}}</span>
-                                <span class="movie-meta">{{movie.get_category_display}}</span>
-                                <button class="trailer-btn" data-trailer="{{ movie.movie_trailer }}" onclick="event.preventDefault(); openTrailer(this.getAttribute('data-trailer'))">▶ Trailer</button>
                                 <h2 class="movietitle">{{movie.title}}</h2>
+                                <span class="movie-meta">{{movie.rating|default:"5.0"}}</span>
+                                <button class="btn-trailer" data-trailer="{{ movie.movie_trailer }}" onclick="event.preventDefault(); openTrailer(this.getAttribute('data-trailer'))">▶ Play Trailer</button>
                             </a>
                         </div>
                     {% empty %}
-                        <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state">
                             <span class="empty-state-icon">🎬</span>
                             <h3>No Movies Found</h3>
                             <p>We couldn't find any movies matching your criteria. Try adjusting your filters or search query.</p>

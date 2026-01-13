@@ -12,6 +12,7 @@ urlpatterns = [
     path("language/<str:language>", views.filter_by_language, name="filter_by_language"),
     path("tv-shows/", views.tv_shows, name="tv_shows"),
     path("search_results/", views.search_results, name="search_results"),
+    path("random_movie_data/", views.random_movie_data, name="random_movie_data"),
     path("profile/", views.profile_view, name="profile"),
     path("profile/<str:username>/", views.public_profile, name="public_profile"),
     path("contact/", views.contact, name="contact"),

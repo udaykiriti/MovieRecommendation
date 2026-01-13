@@ -7,15 +7,15 @@
     <div class="auth-container" style="max-width: 800px;">
         
         <div style="text-align: center; margin-bottom: 40px;">
-            <div style="width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden; border: 4px solid #c22026;">
+            <div class="avatar-main">
                 {% if profile_user.profile.image %}
-                    <img src="{{ profile_user.profile.image.url }}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{ profile_user.profile.image.url }}" alt="Profile Picture">
                 {% else %}
                     <div style="width: 100%; height: 100%; background: #333;"></div>
                 {% endif %}
             </div>
             <h2 style="color: #fff; font-size: 2rem; margin-bottom: 5px;">{{ profile_user.username }}</h2>
-            <p style="color: #aaa;">Joined {{ profile_user.date_joined|date:"F Y" }}</p>
+            <p style="color: var(--text-muted);">Joined {{ profile_user.date_joined|date:"F Y" }}</p>
             
             {% if profile_user.profile.bio %}
                 <div style="margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; color: #ddd;">
@@ -25,8 +25,8 @@
         </div>
 
         <!-- Favorites Section -->
-        <div style="margin-top: 50px; border-top: 1px solid #333; padding-top: 30px;">
-            <h3 style="color: #fff; margin-bottom: 20px; font-size: 20px; border-left: 4px solid #c22026; padding-left: 10px;">Favorites</h3>
+        <div style="margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;">
+            <h3 class="section-header">Favorites</h3>
             {% if profile_user.profile.favorites.exists %}
                 <div class="movies" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
                     {% for movie in profile_user.profile.favorites.all %}
@@ -39,13 +39,13 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p style="color: #777;">No favorites yet.</p>
+                <p style="color: var(--text-muted);">No favorites yet.</p>
             {% endif %}
         </div>
         
         <!-- Watchlist Section -->
-        <div style="margin-top: 50px; border-top: 1px solid #333; padding-top: 30px;">
-            <h3 style="color: #fff; margin-bottom: 20px; font-size: 20px; border-left: 4px solid #4caf50; padding-left: 10px;">Watchlist</h3>
+        <div style="margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;">
+            <h3 class="section-header watchlist">Watchlist</h3>
             {% if profile_user.profile.watchlist.exists %}
                 <div class="movies" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
                     {% for movie in profile_user.profile.watchlist.all %}
@@ -58,7 +58,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p style="color: #777;">Watchlist is empty.</p>
+                <p style="color: var(--text-muted);">Watchlist is empty.</p>
             {% endif %}
         </div>
 

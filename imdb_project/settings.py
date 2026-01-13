@@ -133,3 +133,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# TMDb API Settings
+# Get your key at: https://www.themoviedb.org/settings/api
+TMDB_API_KEY = '6dd62a3d8ee71b43b36744a5baf75b1b'
