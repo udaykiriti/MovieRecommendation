@@ -18,7 +18,7 @@ LANGUAGE_CHOICES = (
 )
 
 STATUS_CHOICES = (
-    ('RA' , 'RECRNTLY ADDED'),
+    ('RA' , 'RECENTLY ADDED'),
     ('MW' , 'MOST WATCHED'),
     ('TR' , 'TOP RATED'),
 )
@@ -34,10 +34,10 @@ class Movie(models.Model):
     language = models.CharField(choices=LANGUAGE_CHOICES, max_length=10)
     status = models.CharField(choices=STATUS_CHOICES, max_length=2)
     cast = models.CharField(max_length=100)
-    year_of_producation = models.DateField()
+    year_of_production = models.DateField()
     views_count = models.IntegerField(default=0)
     movie_trailer = models.URLField()
-    created = models.DateTimeField(default=datetime.now())
+    created = models.DateTimeField(default=datetime.now)
     slug = models.SlugField(blank=True, null=True)
     
 
