@@ -3,8 +3,18 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Movies</title>
+	<title>{% block title %}MovieRecommendation - Watch Latest Trailers{% endblock title %}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="description" content="Watch the latest movie trailers, find download links, and explore your favorite genres in high quality.">
+    <meta name="keywords" content="movies, trailers, watch movies, cinema, action movies, drama, romance, comedy">
+    <meta name="author" content="MovieRecommendation Team">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="MovieRecommendation - Watch Latest Trailers">
+    <meta property="og:description" content="Explore a wide range of movie trailers and details.">
+    <meta property="og:image" content="{% static 'img/logo.png' %}">
 
 	<!-- Link Swiper's CSS -->
 	<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
@@ -16,19 +26,28 @@
 
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="film-loader">
+            <div class="reel"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
 	<div class="wrapper">
+
+    <div id="toast-container"></div>
 
 		<header class="header">
 			<figure class="logo"><a href="/"><img src="{% static 'img/logo.png' %}" alt="Logo"></figure></a>
 			<nav class="menu">
 				<ul>
 					<li><a href="/">Home</a></li>
+                    <li><a href="{% url 'movie:tv_shows' %}">TV Shows</a></li>
 					<li><a>Genres</a>
 						<ul>
-							<li><a href="{% url 'movie:filter_by_category' 'action' %}">Action</a></li>
-							<li><a href="{% url 'movie:filter_by_category' 'comedy' %}">Comedy</a></li>
-							<li><a href="{% url 'movie:filter_by_category' 'drama' %}">Drama</a></li>
-							<li><a href="{% url 'movie:filter_by_category' 'romance' %}">Romance</a></li>
+                            {% for category in categories_list %}
+							    <li><a href="{% url 'movie:filter_by_category' category.name|lower %}">{{ category.name|title }}</a></li>
+                            {% endfor %}
 						</ul>
 					</li>
 					<li><a>Language</a>
@@ -45,10 +64,30 @@
 					</li>
 				</ul>
 			</nav>
-			<form class="search" method="GET" action="{% url 'movie:movie' %}">
-				<input type="text" name="q" value="{{request.GET.q}}" class="searchfield" placeholder="Search..." style="color: #FFF;">
-				<input type="submit" value="" class="searchsubmit">
-			</form>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <form class="search" method="GET" action="{% url 'movie:movie' %}">
+                    <input type="text" name="q" value="{{request.GET.q}}" class="searchfield" placeholder="Search..." style="color: #FFF;">
+                    <input type="submit" value="" class="searchsubmit">
+                </form>
+
+                {% if user.is_authenticated %}
+                    <div class="user-info" style="color: #fff; font-size: 14px; display: flex; align-items: center; gap: 15px;">
+                        <a href="{% url 'movie:profile' %}" style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; border: 2px solid #c22026;">
+                                <img src="{{ user.profile.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <span style="color: #aaa;">Hi, <strong style="color: #fff;">{{ user.username }}</strong></span>
+                        </a>
+                        <a href="{% url 'movie:logout' %}" class="logout-link" style="color: #c22026; font-weight: bold; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="auth-links" style="display: flex; gap: 12px; align-items: center;">
+                        <a href="{% url 'movie:login' %}" style="color: #fff; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Login</a>
+                        <a href="{% url 'movie:signup' %}" class="btn-primary" style="padding: 8px 20px; font-size: 12px; letter-spacing: 1px;">Join Free</a>
+                    </div>
+                {% endif %}
+            </div>
 
 			<div class="toggle"><img src="{% static 'img/menu.svg' %}"></div>
 		</header>
@@ -80,25 +119,41 @@
             
 
 		<footer class="footer">
-			<div class="copyright"><p>Copyright &copy 2024 udaykiriti sriram dheeraj</p></div>
-			<div class="footermenu">
-				<ul>
-					<li><a href="#">Home</a></li>
-					<li><a href="#">Contact</a></li>
-					<li><a href="#">Terms and conditions</a></li>
-				</ul>
+			<div class="footer-content">
+				<div class="footer-col">
+					<h4>About Us</h4>
+					<ul>
+						<li><a href="#">Our Story</a></li>
+						<li><a href="{% url 'movie:contact' %}">Contact</a></li>
+						<li><a href="#">Careers</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h4>Support</h4>
+					<ul>
+						<li><a href="#">FAQ</a></li>
+						<li><a href="#">Help Center</a></li>
+						<li><a href="#">Terms of Service</a></li>
+						<li><a href="#">Privacy Policy</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h4>Follow Us</h4>
+					<div class="social-links">
+						<a href="#" class="social-icon">F</a>
+						<a href="#" class="social-icon">T</a>
+						<a href="#" class="social-icon">I</a>
+					</div>
+				</div>
+				<div class="footer-col">
+					<h4>Newsletter</h4>
+					<form class="newsletter-form">
+						<input type="email" class="newsletter-input" placeholder="Enter your email">
+						<button type="button" class="newsletter-btn">Join</button>
+					</form>
+				</div>
 			</div>
-			<div class="tags">
-				<ul>
-					<li>Watch Free Movies Trailers</li>
-					<li>Movie Trailers</li>
-					<li>English Subtitled Movies Trailers</li>
-					<li>Latest Movies Trailers</li>
-					<li>New Movies Trailers</li>
-
-				</ul>
-			</div>
-
+			<div class="copyright"><p>&copy; 2024 MovieRecommendation. All rights reserved.</p></div>
 		</footer>
 
 		<!-- Swiper JS -->
@@ -225,7 +280,12 @@
 
 			});
 
-			
+            // Display Django messages as toasts
+            {% if messages %}
+                {% for message in messages %}
+                    showToast("{{ message }}", "{{ message.tags }}");
+                {% endfor %}
+            {% endif %}
 		</script>
 
 

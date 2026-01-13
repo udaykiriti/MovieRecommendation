@@ -10,11 +10,18 @@
                         <div class="mov">
                             <a href="{% url 'movie:movie_details' movie.id %}">
                                 <img src="{{movie.image.url}}">
+                                <span class="movie-year">{{movie.year_of_production|date:"Y"}}</span>
+                                <span class="movie-meta">{{movie.get_category_display}}</span>
                                 <h2 class="movietitle">{{movie.title}}</h2>
                             </a>
                         </div>
                     {% empty %}
-                        <h3 style="color:red;display:flex;justify-content: center;align-items: center;">There Are No Movies In This Category</h3>
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <span class="empty-state-icon">🎬</span>
+                            <h3>No Movies Found</h3>
+                            <p>We couldn't find any movies matching your criteria. Try adjusting your filters or search query.</p>
+                            <a href="/" class="btn-primary">Go Back Home</a>
+                        </div>
                     {% endfor %}    
                         
                
@@ -26,16 +33,16 @@
                         <ul>
                             
                             {% if page_obj.has_previous %}
-                                <li><a href="?page={{page_obj.previous_page_number}}">Prev</a></li>
+                                <li><a href="?page={{page_obj.previous_page_number}}">&laquo; Prev</a></li>
                             {% else %}
-                                <li class="disabled"></li>
+                                <li class="disabled"><a>&laquo; Prev</a></li>
                             {% endif %}
                                 
 
                             {% for page in page_obj.paginator.page_range %}
                                 
                                 {% if page_obj.number == page %}
-                                    <li><a href="#">{{ page }}</a></li>
+                                    <li class="active"><a href="#">{{ page }}</a></li>
                                     
                                 {% else %}
                                     <li><a href="?page={{ page }}">{{ page }}</a></li>
@@ -44,9 +51,9 @@
                                 
                             
                             {% if page_obj.has_next %}
-                                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                                <li><a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a></li>
                             {% else %}
-                                <li class="disabled"></li>
+                                <li class="disabled"><a>Next &raquo;</a></li>
                             {% endif %}
                             
                         </ul>

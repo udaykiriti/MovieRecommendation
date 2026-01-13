@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up - MovieRecommendation{% endblock %}
+
+{% block content %}
+<main class="content">
+    <div class="auth-container">
+        <h2>Create Account</h2>
+        
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    
+                    {% if field.errors %}
+                        <ul class="form-errors">
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    
+                    {% if field.help_text %}
+                        <small class="form-help">{{ field.help_text|safe }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer; margin-top: 10px; padding: 14px;">Register</button>
+        </form>
+        
+        <div class="auth-footer">
+            Already have an account? <a href="{% url 'movie:login' %}">Login</a>
+        </div>
+    </div>
+</main>
+
+<style>
+    /* Specific overrides for Django form widgets */
+    .form-group input {
+        display: block;
+    }
+    /* Hide the default password help text which is usually too long and technical */
+    .form-group:nth-child(n+3) .form-help ul {
+        display: none;
+    }
+</style>
+{% endblock %}

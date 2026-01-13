@@ -2,7 +2,26 @@ from tabnanny import verbose
 from django.db import models
 from django.utils.text import slugify
 from datetime import datetime
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 # Create your models here.
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = "Categories"
 
 
 CATEGORY_CHOICES = (
@@ -72,3 +91,32 @@ class MovieLinks(models.Model):
 
     def __str__(self) -> str:
         return self.movie.title
+
+# User Profile
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    favorites = models.ManyToManyField(Movie, blank=True, related_name='favorited_by')
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.movie.title}'
+
+# Signals to auto-create profile
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_profile(sender, instance, **kwargs):
+    instance.profile.save()
