@@ -44,10 +44,11 @@
                                 </div>
                             {% endif %}
                         </li>
-						<li>{{movie.description}}</li>
-						<li><a href="#">Adventure</a>, <a href="#">Drama</a>, <a href="#">Romance</a></li>
-						<li><strong>Cast:</strong> {{movie.cast}}</li>
-						<li style="display: flex; gap: 20px; align-items: center; margin-top: 15px;">
+						                                               <li>{{movie.description}}</li>
+						                                               <li><a href="#">Adventure</a>, <a href="#">Drama</a>, <a href="#">Romance</a></li>
+						                                               <li><strong>Cast:</strong> {{ movie.cast.all|join:", " }}</li>
+						                                               <li style="display: flex; gap: 20px; align-items: center; margin-top: 15px;">
+						
                             <span>{{ movie.views_count }} Views</span>
                             {% if movie.rating %}
                                 <span class="rating-badge">

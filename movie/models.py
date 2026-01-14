@@ -44,6 +44,18 @@ STATUS_CHOICES = (
 
 
 
+class Actor(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Actor, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -52,7 +64,7 @@ class Movie(models.Model):
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=10)
     language = models.CharField(choices=LANGUAGE_CHOICES, max_length=10)
     status = models.CharField(choices=STATUS_CHOICES, max_length=2)
-    cast = models.CharField(max_length=100)
+    cast = models.ManyToManyField(Actor, related_name='movies', blank=True)
     year_of_production = models.DateField()
     views_count = models.IntegerField(default=0)
     movie_trailer = models.URLField()

@@ -44,7 +44,9 @@ def compute_all_recommendations():
 
     # 1. Build DataFrame
     data = []
-    for m in movies:
+    # Pre-fetch cast for performance
+    movies_qs = Movie.objects.all().prefetch_related('cast')
+    for m in movies_qs:
         cat_name = ""
         if hasattr(m, 'category') and m.category:
             if hasattr(m.category, 'name'): 
@@ -52,11 +54,14 @@ def compute_all_recommendations():
             else: 
                 cat_name = str(m.category)
         
+        # Join actor names into a string
+        cast_names = ", ".join([a.name for a in m.cast.all()])
+        
         data.append({
             'id': m.id,
             'title': m.title,
             'description': m.description,
-            'cast': m.cast,
+            'cast': cast_names,
             'category': cat_name
         })
     

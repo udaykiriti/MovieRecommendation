@@ -14,10 +14,10 @@ def movies(request):
     query = request.GET.get('q')
     if query:
         movies = Movie.objects.filter(
-            Q(title__icontains=query) | Q(category__icontains=query)
-        )
+            Q(title__icontains=query) | Q(category__icontains=query) | Q(cast__name__icontains=query)
+        ).distinct().order_by('-created')
     else:
-        movies = Movie.objects.all().order_by('-created')
+        movies = Movie.objects.all().prefetch_related('cast').order_by('-created')
 
     paginator = Paginator(movies, 12)
     page_number = request.GET.get('page')
@@ -221,7 +221,9 @@ def search_results(request):
     query = request.GET.get('q')
     results = []
     if query:
-        results = Movie.objects.filter(title__icontains=query)[:5]
+        results = Movie.objects.filter(
+            Q(title__icontains=query) | Q(cast__name__icontains=query)
+        ).distinct()[:5]
     
     return render(request, 'partials/search_results.html', {'results': results, 'query': query})
 

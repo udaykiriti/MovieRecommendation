@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Movie, Category, Profile
+from .models import Movie, Category, Profile, Actor
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.utils import timezone
@@ -27,12 +27,13 @@ class MovieViewsTest(TestCase):
             category='action',
             language='english',
             status='RA',
-            cast='Test Cast',
             year_of_production=timezone.now().date(),
             movie_trailer='https://youtube.com',
             image='movies/test.jpg',
             banner='movies_banner/test.jpg'
         )
+        self.actor = Actor.objects.create(name='Test Actor')
+        self.movie.cast.add(self.actor)
 
     def test_movies_view(self):
         response = self.client.get(reverse('movie:movie'))

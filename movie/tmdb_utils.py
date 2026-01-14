@@ -31,7 +31,7 @@ def fetch_tmdb_movie_details(tmdb_id):
             'rating': data.get('vote_average'),
             'image_url': f"https://image.tmdb.org/t/p/w500{data.get('poster_path')}" if data.get('poster_path') else None,
             'banner_url': f"https://image.tmdb.org/t/p/original{data.get('backdrop_path')}" if data.get('backdrop_path') else None,
-            'cast': ", ".join([c['name'] for c in data.get('credits', {}).get('cast', [])[:5]]),
+            'cast': [c['name'] for c in data.get('credits', {}).get('cast', [])[:5]],
             'trailer_url': ""
         }
 
