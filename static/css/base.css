@@ -1,0 +1,42 @@
+/* --- Base / Global --- */
+:root {
+    --primary-color: #00d2ff;
+    --secondary-color: #3a7bd5;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --glass-blur: blur(12px);
+    --text-main: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.7);
+    --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    --btn-danger: #c22026;
+    --btn-dark: #2b2b2b;
+    --success-color: #4caf50;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, .hero-title, .logo-text {
+    font-family: 'Outfit', sans-serif;
+}
+
+.centered { 
+    max-width: 1400px; 
+    margin: 0 auto; 
+    padding: 60px 5%;
+}
+
+.mt-20 { margin-top: 20px; }
+.mb-20 { margin-bottom: 20px; }

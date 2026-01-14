@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Popular TV Shows - CineStream{% endblock %}
+
+{% block content %}
+<main class="content">
+    <section class="centered">
+        <div class="section-header" style="margin-bottom: 30px;">
+            <h2 style="color: #fff; font-size: 2rem;">Popular TV Shows <span style="font-size: 1rem; color: var(--text-muted);">(via TVmaze API)</span></h2>
+        </div>
+        
+        <div class="movies">
+            {% for show in shows %}
+                <div class="mov-card">
+                    <div class="mov-poster">
+                        {% if show.image and show.image.medium %}
+                            <img src="{{ show.image.medium }}" alt="{{ show.name }}" loading="lazy">
+                        {% else %}
+                            <div style="height: 100%; width: 100%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-muted);">No Image</div>
+                        {% endif %}
+                    </div>
+                    <div class="mov-content">
+                        <div class="mov-actions">
+                            <a href="{{ show.url }}" target="_blank" class="icon-btn play" title="Play">
+                                <span class="material-icons-round">play_arrow</span>
+                            </a>
+                            <button class="icon-btn add" title="Add to List">
+                                <span class="material-icons-round">add</span>
+                            </button>
+                            <button class="icon-btn like" title="Like">
+                                <span class="material-icons-round">thumb_up_off_alt</span>
+                            </button>
+                            <a href="{{ show.url }}" target="_blank" class="icon-btn more" title="More Info">
+                                <span class="material-icons-round">keyboard_arrow_down</span>
+                            </a>
+                        </div>
+                        <div class="mov-info">
+                            <h3 class="mov-title">{{ show.name }}</h3>
+                            <div class="mov-meta-row">
+                                <span class="match-score">{% if show.rating.average %}{{ show.rating.average|floatformat:0 }}0% Match{% else %}New{% endif %}</span>
+                                <span class="age-rating">{{ show.premiered|slice:":4" }}</span>
+                                <span class="hd-badge">TV</span>
+                            </div>
+                            <div class="mov-genres">
+                                {% for genre in show.genres %}
+                                    <span>{{ genre }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Full card link fallback -->
+                    <a href="{{ show.url }}" target="_blank" class="mov-link-overlay"></a>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <span class="empty-state-icon">📡</span>
+                    <h3>Unable to Connect</h3>
+                    <p>We couldn't fetch the TV shows at this moment. Please check your internet connection or try again later.</p>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="pagination" style="margin-top: 50px; text-align: center;">
+            <a href="https://www.tvmaze.com/" target="_blank" class="cool-btn">View More on TVmaze</a>
+        </div>
+    </section>
+</main>
+{% endblock %}

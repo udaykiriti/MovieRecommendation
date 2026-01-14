@@ -24,7 +24,15 @@
 
 	<!-- Link Swiper's CSS -->
 	<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
-	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- Custom CSS (Modularized) -->
+	<link rel="stylesheet" href="{% static 'css/base.css' %}">
+	<link rel="stylesheet" href="{% static 'css/layout.css' %}">
+	<link rel="stylesheet" href="{% static 'css/components.css' %}">
+	<link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+	<link rel="stylesheet" href="{% static 'css/pages/details.css' %}">
+	<link rel="stylesheet" href="{% static 'css/pages/profile.css' %}">
+	<link rel="stylesheet" href="{% static 'css/pages/auth.css' %}">
 
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -63,122 +71,110 @@
     <div id="toast-container"></div>
 
 		<header class="header">
-			<figure class="logo"><a href="/"><img src="{% static 'img/logo.svg' %}" alt="CineStream Logo"></a></figure>
-			<nav class="menu">
-				<ul>
-					<li><a href="/">Home</a></li>
-                    <li><a href="{% url 'movie:tv_shows' %}">TV Shows</a></li>
-					<li class="has-dropdown"><a href="javascript:void(0);">Genres</a>
-						<ul>
-                            {% for category in categories_list %}
-							    <li><a href="{% url 'movie:filter_by_category' category.name|lower %}">{{ category.name|title }}</a></li>
-                            {% endfor %}
-						</ul>
-					</li>
-					<li class="has-dropdown"><a href="javascript:void(0);">Language</a>
-						<ul>
-							<li><a href="{% url 'movie:filter_by_language' 'english' %}">English</a></li>
-							<li><a href="{% url 'movie:filter_by_language' 'german' %}">German</a></li>
-						</ul>
-					</li>
-                    <li>
-                        <a href="javascript:void(0);" class="surprise-btn" onclick="startSurpriseMachine()">
-                            <span class="material-icons-round" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">auto_awesome</span> Surprise
-                        </a>
-                    </li>
-				</ul>
-			</nav>
+            <div class="header-container">
+                <figure class="logo"><a href="/"><img src="{% static 'img/logo.svg' %}" alt="CineStream Logo"></a></figure>
+                <nav class="menu">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="{% url 'movie:tv_shows' %}">TV Shows</a></li>
+                        <li class="has-dropdown"><a href="javascript:void(0);">Genres</a>
+                            <ul>
+                                {% for category in categories_list %}
+                                    <li><a href="{% url 'movie:filter_by_category' category.name|lower %}">{{ category.name|title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="has-dropdown"><a href="javascript:void(0);">Language</a>
+                            <ul>
+                                <li><a href="{% url 'movie:filter_by_language' 'english' %}">English</a></li>
+                                <li><a href="{% url 'movie:filter_by_language' 'german' %}">German</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="surprise-btn" onclick="startSurpriseMachine()">
+                                <span class="material-icons-round" style="font-size: 18px; vertical-align: middle; margin-right: 5px;">auto_awesome</span> Surprise
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="search-container">
-                    <form class="search" method="GET" action="{% url 'movie:movie' %}">
-                        <div class="search-input-wrapper" style="display: flex; align-items: center; width: 100%;">
-                            <span class="material-icons-round" style="color: rgba(255,255,255,0.5); font-size: 20px; margin-right: 10px;">search</span>
-                            <input type="text" 
-                                   id="main-search"
-                                   name="q" 
-                                   value="{{request.GET.q}}" 
-                                   class="searchfield" 
-                                   placeholder="Search movies..." 
-                                   style="color: #FFF; background: transparent; border: none; outline: none; width: 100%;"
-                                   autocomplete="off"
-                                   hx-get="{% url 'movie:search_results' %}"
-                                   hx-trigger="keyup changed delay:500ms"
-                                   hx-target="#search-results">
-                            <button type="button" class="voice-search-btn" onclick="startVoiceSearch()" style="background: transparent; border: none; color: rgba(255,255,255,0.5); cursor: pointer; display: flex; align-items: center;">
-                                <span class="material-icons-round">mic</span>
-                            </button>
+                <div class="header-actions">
+                    <div class="search-container">
+                        <form class="search" method="GET" action="{% url 'movie:movie' %}">
+                            <div class="search-input-wrapper">
+                                <span class="material-icons-round search-icon">search</span>
+                                <input type="text" 
+                                       id="main-search"
+                                       name="q" 
+                                       value="{{request.GET.q}}" 
+                                       class="searchfield" 
+                                       placeholder="Search movies..." 
+                                       style="color: #FFF; background: transparent; border: none; outline: none; width: 100%;"
+                                       autocomplete="off"
+                                       hx-get="{% url 'movie:search_results' %}"
+                                       hx-trigger="keyup changed delay:500ms"
+                                       hx-target="#search-results">
+                                <button type="button" class="voice-search-btn" onclick="startVoiceSearch()" style="background: transparent; border: none; color: rgba(255,255,255,0.5); cursor: pointer; display: flex; align-items: center;">
+                                    <span class="material-icons-round">mic</span>
+                                </button>
+                            </div>
+                        </form>
+                        <div id="search-results"></div>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <div class="user-info">
+                            <a href="{% url 'movie:profile' %}" class="user-profile-chip">
+                                <div class="avatar-mini">
+                                    <img src="{{ user.profile.image.url }}">
+                                </div>
+                                <span>{{ user.username }}</span>
+                            </a>
+                            <a href="{% url 'movie:logout' %}" class="logout-icon-btn" title="Logout">
+                                <span class="material-icons-round">logout</span>
+                            </a>
                         </div>
-                    </form>
-                    <div id="search-results"></div>
+                    {% else %}
+                        <div class="auth-links">
+                            <a href="{% url 'movie:login' %}" class="login-link">Login</a>
+                            <a href="{% url 'movie:signup' %}" class="btn-primary" style="padding: 8px 20px; font-size: 12px; letter-spacing: 1px;">Join Free</a>
+                        </div>
+                    {% endif %}
                 </div>
 
-                {% if user.is_authenticated %}
-                    <div class="user-info">
-                        <a href="{% url 'movie:profile' %}" class="user-profile-chip">
-                            <div class="avatar-mini">
-                                <img src="{{ user.profile.image.url }}">
-                            </div>
-                            <span>{{ user.username }}</span>
-                        </a>
-                        <a href="{% url 'movie:logout' %}" class="logout-icon-btn" title="Logout">
-                            <span class="material-icons-round">logout</span>
-                        </a>
-                    </div>
-                {% else %}
-                    <div class="auth-links" style="display: flex; gap: 12px; align-items: center;">
-                        <a href="{% url 'movie:login' %}" style="color: #fff; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Login</a>
-                        <a href="{% url 'movie:signup' %}" class="btn-primary" style="padding: 8px 20px; font-size: 12px; letter-spacing: 1px;">Join Free</a>
-                    </div>
-                {% endif %}
+                <div class="toggle"><img src="{% static 'img/menu.svg' %}"></div>
             </div>
-
-			<div class="toggle"><img src="{% static 'img/menu.svg' %}"></div>
 		</header>
 		<!-- Modern Hero Slider -->
-        {% if slider_movies or movie %}
+        {% if slider_movies %}
 		<div class="homeslider">
 			<div class="swiper-container">
 				<div class="swiper-wrapper">
-                    {% if slider_movies %}
-                        {% for mov in slider_movies %}
-                            <div class="swiper-slide">
-                                <!-- Ambient Glow Layer -->
-                                <div class="ambient-glow" style="background-image: url('{{mov.banner.url}}');"></div>
-                                
-                                <img src="{{mov.banner.url}}" class="hero-img">
-                                <div class="caption">
-                                    <div class="captioninside">
-                                        <div class="hero-badge">Featured</div>
-                                        <h3 class="hero-title">{{mov.title}}</h3>
-                                        <p class="hero-desc">{{mov.description|truncatewords:30}}</p>
-                                        <a href="{% url 'movie:movie_details' mov.id %}" class="playbutton">
-                                            <span class="play-icon">▶</span> Watch Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% elif movie %}
-                        <div class="swiper-slide">
-                            <!-- Ambient Glow Layer -->
-                            <div class="ambient-glow" style="background-image: url('{{movie.banner.url}}');"></div>
-                            
-                            <img src="{{movie.banner.url}}" class="hero-img">
+                    {% for mov in slider_movies %}
+                        <div class="swiper-slide" style="background-image: url('{{mov.image.url}}');">
                             <div class="caption">
                                 <div class="captioninside">
                                     <div class="hero-badge">Featured</div>
-                                    <h3 class="hero-title">{{movie.title}}</h3>
-                                    <p class="hero-desc">{{movie.description|truncatewords:30}}</p>
-                                    <a href="{% url 'movie:movie_details' movie.id %}" class="playbutton">
-                                        <span class="play-icon">▶</span> Watch Now
-                                    </a>
+                                    <h3 class="hero-title">{{mov.title}}</h3>
+                                    <p class="hero-desc">{{mov.description|truncatewords:30}}</p>
+                                    <div class="hero-btns">
+                                        <a href="{% url 'movie:movie_details' mov.id %}" class="playbutton">
+                                            <span class="material-icons-round" style="font-size: 1.8rem;">play_arrow</span> Watch Now
+                                        </a>
+                                        {% if mov.movie_trailer %}
+                                        <a href="javascript:void(0)" onclick="openTrailer('{{mov.movie_trailer}}')" class="btn-trailer-hero">
+                                            <span class="material-icons-round" style="font-size: 1.6rem;">videocam</span> Trailer
+                                        </a>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
+                    {% endfor %}
 				</div>
 				<div class="swiper-pagination"></div>
+                <div class="swiper-button-next"><span class="material-icons-round">arrow_forward_ios</span></div>
+                <div class="swiper-button-prev"><span class="material-icons-round">arrow_back_ios_new</span></div>
 			</div>
 		</div>
         {% endif %}
@@ -237,10 +233,14 @@
 
 				var swiper = new Swiper('.homeslider > .swiper-container', {
 					pagination: '.swiper-pagination',
+                    nextButton: '.swiper-button-next',
+                    prevButton: '.swiper-button-prev',
 					paginationClickable: true,
 					preventClicks:false,
 					preventClicksPropagation:false,
-					effect:'fade',
+					effect:'slide',
+                    loop: true,
+                    autoplay: 5000,
 					breakpoints: {
 						320: {
 							height:200

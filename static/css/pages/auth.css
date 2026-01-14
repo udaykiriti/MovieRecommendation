@@ -1,0 +1,47 @@
+/* --- Auth Pages --- */
+.auth-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 120px 20px 40px;
+}
+
+.auth-glass-card {
+    background: rgba(20, 40, 50, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    text-align: center;
+}
+
+.auth-glass-card h2 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.auth-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 30px;
+}
+
+.auth-extra-links {
+    margin-top: 25px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.auth-extra-links a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-extra-links a:hover {
+    text-decoration: underline;
+}

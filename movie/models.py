@@ -60,6 +60,7 @@ class Movie(models.Model):
     slug = models.SlugField(blank=True, null=True)
     tmdb_id = models.IntegerField(unique=True, blank=True, null=True)
     rating = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
+    featured = models.BooleanField(default=False)
     
 
     def save(self , *args , **kwargs):

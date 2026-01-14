@@ -1,0 +1,308 @@
+/* --- Details Page --- */
+.single {
+    max-width: 1200px;
+    margin: 100px auto 40px;
+    background: rgba(20, 40, 50, 0.7);
+    backdrop-filter: blur(20px);
+    padding: 50px;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.trailer_frame iframe {
+    width: 100%;
+    height: 500px;
+    border-radius: 16px;
+    border: var(--glass-border);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.movie {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 50px;
+    align-items: start;
+}
+
+.movie-cover-small {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    aspect-ratio: 2/3;
+    object-fit: cover;
+}
+
+.movie ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+.movie ul li {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.movie ul li strong {
+    color: var(--primary-color);
+}
+
+.movie ul li a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    transition: text-decoration-color 0.3s;
+}
+
+.movie ul li a:hover {
+    text-decoration-color: var(--primary-color);
+}
+
+.meta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.meta-header span:first-child {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #fff, var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Action Buttons in Details */
+.action-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.fav-btn.active {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+    border-color: rgba(255, 77, 77, 0.2);
+}
+
+.watchlist-btn.active {
+    color: var(--success-color);
+    background: rgba(76, 175, 80, 0.1);
+    border-color: rgba(76, 175, 80, 0.2);
+}
+
+/* Rating Badge */
+.rating-badge {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 12px;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rating-badge span {
+    color: #ffc107;
+}
+
+/* Links Section in Details */
+.links h3 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--primary-color);
+    padding-left: 15px;
+    color: #fff;
+}
+
+.links-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.link-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.link-label {
+    font-weight: 700;
+    color: #fff;
+    min-width: 100px;
+    font-size: 1rem;
+}
+
+.link-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+
+.link-btn.download {
+    background: rgba(194, 32, 38, 0.15);
+    color: #ff4d4d;
+    border: 1px solid rgba(194, 32, 38, 0.3);
+}
+
+.link-btn.download:hover {
+    background: var(--btn-danger);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(194, 32, 38, 0.4);
+}
+
+.link-btn.watch {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.link-btn.watch:hover {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Comments Section */
+.comments h3 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--primary-color);
+    padding-left: 15px;
+    color: #fff;
+}
+
+.comment-box {
+    width: 100%;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 120px;
+}
+
+.comment-box:focus {
+    border-color: var(--primary-color);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.comment-item {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s;
+}
+
+.comment-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.comment-user {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.comment-user:hover {
+    text-decoration: underline !important;
+}
+
+.comment-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.comment-text {
+    margin-top: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+}
+
+/* Related Movies */
+.related h3 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--primary-color);
+    padding-left: 15px;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .movie {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+    
+    .movie-cover-small {
+        max-width: 300px;
+        margin-bottom: 20px;
+    }
+
+    .meta-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .trailer_frame iframe {
+        height: 300px;
+    }
+}

@@ -1,42 +1,47 @@
-# Movie Recommendation System
+# GrandLine Cinema - The Pirate Movie Hub 
 
-A web-based movie recommendation and listing platform built with Django. This application allows users to browse movies, search by title, filter by category or language, and view detailed information including cast, trailers, and download links.
+A modern, feature-rich movie recommendation platform built with Django. **GrandLine Cinema** offers a sleek, "Netflix-style" browsing experience, complete with an immersive hero slider, real-time interactions, and personalized user profiles.
 
-## Features
+![GrandLine Cinema](static/img/logo.svg)
 
-*   **Movie Listing:** Browse a paginated list of movies with their posters.
-*   **Search:** Search for movies by title.
-*   **Filters:** Filter movies by:
-    *   **Category:** Action, Drama, Comedy, Romance.
-    *   **Language:** English, German.
-*   **Detailed View:** View comprehensive movie details:
-    *   Description, Release Year, Cast.
-    *   Watch Trailer.
-    *   Download/Watch Links.
-    *   Related Movies suggestions.
-*   **Analytics:** Tracks view counts for each movie.
-*   **Responsive Design:** Includes a slider for featured movies and a responsive grid layout.
+## Key Features
+
+### Immersive UI/UX
+*   **Cinematic Hero Slider:** A responsive, full-screen featured movie slider with video trailers and a smooth vignette effect.
+*   **Glassmorphism Design:** Modern, translucent UI elements for a premium feel.
+*   **Responsive Layout:** Fully optimized for desktop, tablet, and mobile devices.
+
+### Discovery & Interaction
+*   **Smart Search:** Real-time search with **Voice Command** support ("Search for...") powered by HTMX and Web Speech API.
+*   **"Surprise Me" Machine:** A fun, slot-machine style random movie picker.
+*   **Advanced Filtering:** Browse by Genre (Action, Drama, etc.) and Language.
+*   **TV Shows:** Browse popular TV shows fetched from external APIs.
+
+###  User Personalization
+*   **User Profiles:** customizable profiles with avatars and bio.
+*   **Watchlist & Favorites:** Add movies to your personal collections with one click.
+*   **Comments System:** Engage with the community by leaving comments on movies.
 
 ## Tech Stack
 
-*   **Backend:** Python 3, Django 3.2+
-*   **Database:** SQLite (Default)
-*   **Frontend:** HTML, CSS, JavaScript (jQuery, Swiper.js)
+*   **Backend:** Python 3, Django 4.x
+*   **Frontend:** HTML5, CSS3 (Modular), JavaScript (ES6+)
+*   **Libraries:**
+    *   **HTMX:** For seamless, SPA-like interactions without full page reloads.
+    *   **Swiper.js:** For the touch-enabled, responsive sliders.
+    *   **jQuery:** For DOM manipulation and effects.
+*   **Database:** SQLite (Default) / PostgreSQL ready
 
-## Installation & Setup
-
-Follow these steps to set up the project locally.
+##  Installation & Setup
 
 ### 1. Clone the Repository
-
 ```bash
 git clone <repository-url>
 cd MovieRecommendation
 ```
 
-### 2. Create and Activate a Virtual Environment
-
-It is recommended to use a virtual environment to manage dependencies.
+### 2. Set Up Virtual Environment
+It's recommended to use a virtual environment.
 
 **Linux/macOS:**
 ```bash
@@ -51,53 +56,44 @@ venv\Scripts\activate
 ```
 
 ### 3. Install Dependencies
-
-Install Django and Pillow (for image handling).
-
 ```bash
-pip install django pillow
+pip install -r requirements.txt
 ```
-*(If a `requirements.txt` file is present, you can run `pip install -r requirements.txt` instead)*
 
-### 4. Apply Database Migrations
-
-Set up the SQLite database.
-
+### 4. Database Setup
+Apply migrations to create the database schema.
 ```bash
 python manage.py migrate
 ```
 
-### 5. Create a Superuser (Optional)
-
-To access the Django admin panel to add movies:
-
+### 5. Create Admin User
+To manage movies and users:
 ```bash
 python manage.py createsuperuser
 ```
 
-### 6. Run the Development Server
-
+### 6. Run the Server
 ```bash
 python manage.py runserver
 ```
-
-Open your browser and navigate to `http://127.0.0.1:8000/`.
+Visit `http://127.0.0.1:8000/` in your browser.
 
 ## Project Structure
 
-*   **`imdb_project/`**: Main project configuration settings and URLs.
-*   **`movie/`**: The core application handling models, views, and templates.
-    *   `models.py`: Defines `Movie` and `MovieLinks` database structures.
-    *   `views.py`: Handles logic for listing, searching, and filtering movies.
-    *   `urls.py`: App-specific URL routing.
-*   **`templates/`**: HTML templates for the website.
-*   **`static/`**: CSS, JavaScript, and static image files.
-*   **`media/`**: User-uploaded content (Movie posters and banners).
+*   **`movie/`**: Core application logic.
+    *   `models.py`: Database schemas (Movie, Profile, Comment, etc.).
+    *   `views.py`: Business logic and request handling.
+*   **`templates/`**:
+    *   `auth/`: Login/Signup pages.
+    *   `movies/`: Lists and Detail views.
+    *   `pages/`: Profile, Contact, and static pages.
+    *   `partials/`: Reusable HTMX components (icons, search results).
+*   **`static/`**:
+    *   `css/`: Modular stylesheets (`base.css`, `pages/home.css`, etc.).
+    *   `js/`: Custom scripts and libraries.
 
 ## Contributing
 
-1.  Fork the repository.
-2.  Create a new branch for your feature (`git checkout -b feature-name`).
-3.  Commit your changes (`git commit -m 'Add new feature'`).
-4.  Push to the branch (`git push origin feature-name`).
-5.  Open a Pull Request.
+Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
+
+---

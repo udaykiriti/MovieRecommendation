@@ -23,9 +23,11 @@ def movies(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    slider_movies = Movie.objects.all().order_by('-created')[:5]
+    slider_movies = Movie.objects.filter(featured=True).order_by('-created')[:5]
+    if not slider_movies:
+        slider_movies = Movie.objects.all().order_by('-created')[:5]
     
-    return render(request, "movie/movie_list.html", {'page_obj': page_obj, 'slider_movies': slider_movies})
+    return render(request, "movies/movie_list.html", {'page_obj': page_obj, 'slider_movies': slider_movies})
 
 def movie_details(request, _id):
     movie = get_object_or_404(Movie, pk=_id)
@@ -62,7 +64,7 @@ def movie_details(request, _id):
         'is_favorited': is_favorited,
         'is_watchlisted': is_watchlisted,
     }
-    return render(request, "movie/movie_details.html", context)
+    return render(request, "movies/movie_details.html", context)
 
 def tv_shows(request):
     try:
@@ -75,7 +77,7 @@ def tv_shows(request):
     except requests.RequestException:
         shows = []
     
-    return render(request, "movie/tv_shows.html", {'shows': shows})
+    return render(request, "movies/tv_shows.html", {'shows': shows})
 
 @login_required
 def profile_view(request):
@@ -102,12 +104,12 @@ def profile_view(request):
         messages.success(request, "Profile updated successfully.")
         return redirect('movie:profile')
 
-    return render(request, "movie/profile.html")
+    return render(request, "pages/profile.html")
 
 def public_profile(request, username):
     from django.contrib.auth.models import User
     user = get_object_or_404(User, username=username)
-    return render(request, "movie/public_profile.html", {'profile_user': user})
+    return render(request, "pages/public_profile.html", {'profile_user': user})
 
 def toggle_watchlist(request, _id):
     if not request.user.is_authenticated:
@@ -133,7 +135,7 @@ def toggle_watchlist(request, _id):
 
 
 def contact(request):
-    return render(request, "movie/contact.html")
+    return render(request, "pages/contact.html")
 
 def signup(request):
     if request.method == 'POST':
@@ -145,7 +147,7 @@ def signup(request):
             return redirect('movie:movie')
     else:
         form = UserCreationForm()
-    return render(request, 'movie/signup.html', {'form': form})
+    return render(request, 'auth/signup.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
@@ -160,7 +162,7 @@ def login_view(request):
         else:
             messages.error(request, "Invalid username or password.")
     
-    return render(request, 'movie/login.html')
+    return render(request, 'auth/login.html')
 
 def logout_view(request):
     logout(request)
@@ -199,7 +201,7 @@ def filter_by_category(request, category):
     paginator = Paginator(movies, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    return render(request, "movie/movie_list.html", context={
+    return render(request, "movies/movie_list.html", context={
         "page_obj": page_obj
     })
 
@@ -209,7 +211,7 @@ def filter_by_language(request, language):
     paginator = Paginator(movies, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    return render(request, "movie/movie_list.html", context={
+    return render(request, "movies/movie_list.html", context={
         "page_obj": page_obj
     })
 

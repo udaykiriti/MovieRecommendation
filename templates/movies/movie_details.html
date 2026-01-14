@@ -112,18 +112,44 @@
                     </div>
 				</section>
 
-				<section class="related">
-					<h3>Related movies</h3>
-					<div class="related-grid">
-						{% for related_movie in related_movies %}
-							<div class="relatemovie">
-								<a href="{% url 'movie:movie_details' related_movie.id %}"><img src="{{related_movie.image.url}}"></a>
-								<a href="{% url 'movie:movie_details' related_movie.id %}"><span class="relatedname">{{related_movie.title}}</span></a>
-							</div>
-						{% endfor %}
-					</div>
-				</section>
-
+				                                <section class="related">
+				                                        <h3>Related movies</h3>
+				                                        <div class="movies">
+				                                                {% for related_movie in related_movies %}
+				                                                    <div class="mov-card">
+				                                                        <div class="mov-poster">
+				                                                            <img src="{{related_movie.image.url}}" alt="{{related_movie.title}}" loading="lazy">
+				                                                        </div>
+				                                                        <div class="mov-content">
+				                                                                                                                        <div class="mov-actions">
+				                                                                                                                            <a href="{% url 'movie:movie_details' related_movie.id %}" class="icon-btn play" title="Play">
+				                                                                                                                                <span class="material-icons-round">play_arrow</span>
+				                                                                                                                            </a>
+				                                                                                                                            <button class="icon-btn add" 
+				                                                                                                                                    title="Add to List"
+				                                                                                                                                    hx-post="{% url 'movie:toggle_watchlist' related_movie.id %}"
+				                                                                                                                                    hx-trigger="click"
+				                                                                                                                                    hx-target="this"
+				                                                                                                                                    hx-swap="innerHTML"
+				                                                                                                                                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+				                                                                                                                                {% include 'partials/watchlist_icon.html' %}
+				                                                                                                                            </button>
+				                                                                                                                            <a href="{% url 'movie:movie_details' related_movie.id %}" class="icon-btn more" title="More Info">
+				                                                                                                                                <span class="material-icons-round">keyboard_arrow_down</span>
+				                                                                                                                            </a>
+				                                                                                                                        </div>				                                                            <div class="mov-info">
+				                                                                <h3 class="mov-title">{{related_movie.title}}</h3>
+				                                                                <div class="mov-meta-row">
+				                                                                    <span class="match-score">{{ related_movie.rating|default:"8.5" }} Match</span>
+				                                                                    <span class="hd-badge">HD</span>
+				                                                                </div>
+				                                                            </div>
+				                                                        </div>
+				                                                        <a href="{% url 'movie:movie_details' related_movie.id %}" class="mov-link-overlay"></a>
+				                                                    </div>
+				                                                {% endfor %}
+				                                        </div>
+				                                </section>
 
 			</div>
 		</main>
