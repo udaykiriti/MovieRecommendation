@@ -199,7 +199,9 @@ def toggle_favorite(request, _id):
 
 
 def filter_by_category(request, category):
-    movies = Movie.objects.filter(category__name__iexact=category)
+    from .models import Category
+    cat = get_object_or_404(Category, name__iexact=category)
+    movies = cat.movies.all().order_by('-created')
     paginator = Paginator(movies, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
