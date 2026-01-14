@@ -24,7 +24,6 @@ class MovieViewsTest(TestCase):
         self.movie = Movie.objects.create(
             title='Test Movie',
             description='Test Description',
-            category='action',
             language='english',
             status='RA',
             year_of_production=timezone.now().date(),
@@ -32,6 +31,7 @@ class MovieViewsTest(TestCase):
             image='movies/test.jpg',
             banner='movies_banner/test.jpg'
         )
+        self.movie.category.add(self.category)
         self.actor = Actor.objects.create(name='Test Actor')
         self.movie.cast.add(self.actor)
 

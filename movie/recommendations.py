@@ -27,7 +27,9 @@ def get_recommendations(movie_id, total_results=6):
     # Fallback: Simple Category Match (Fast)
     try:
         movie = Movie.objects.get(id=movie_id)
-        return list(Movie.objects.filter(category=movie.category).exclude(id=movie_id).order_by('-created')[:total_results])
+        # Get movies that share ANY category with the current movie
+        movie_categories = movie.category.all()
+        return list(Movie.objects.filter(category__in=movie_categories).exclude(id=movie_id).distinct().order_by('-created')[:total_results])
     except Movie.DoesNotExist:
         return []
 
@@ -44,15 +46,11 @@ def compute_all_recommendations():
 
     # 1. Build DataFrame
     data = []
-    # Pre-fetch cast for performance
-    movies_qs = Movie.objects.all().prefetch_related('cast')
+    # Pre-fetch cast and category for performance
+    movies_qs = Movie.objects.all().prefetch_related('cast', 'category')
     for m in movies_qs:
-        cat_name = ""
-        if hasattr(m, 'category') and m.category:
-            if hasattr(m.category, 'name'): 
-                cat_name = m.category.name
-            else: 
-                cat_name = str(m.category)
+        # Join category names into a string
+        cat_names = ", ".join([c.name for c in m.category.all()])
         
         # Join actor names into a string
         cast_names = ", ".join([a.name for a in m.cast.all()])
@@ -62,7 +60,7 @@ def compute_all_recommendations():
             'title': m.title,
             'description': m.description,
             'cast': cast_names,
-            'category': cat_name
+            'category': cat_names
         })
     
     df = pd.DataFrame(data)

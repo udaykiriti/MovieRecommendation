@@ -6,8 +6,8 @@ from django.contrib import messages
 # Register your models here.
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'language', 'status', 'year_of_production', 'tmdb_id', 'rating']
-    search_fields = ['title', 'description', 'cast__name']
+    list_display = ['title', 'language', 'status', 'year_of_production', 'tmdb_id', 'rating']
+    search_fields = ['title', 'description', 'cast__name', 'category__name']
     list_filter = ['category', 'language', 'status']
     actions = ['sync_with_tmdb']
     

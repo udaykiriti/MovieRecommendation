@@ -57,11 +57,11 @@
                                         <span class="duration">2h 10m</span>
                                     </div>
                                     <div class="mov-genres">
-                                        {% if movie.category %}
-                                            <span>{{ movie.category|title }}</span>
-                                        {% else %}
+                                        {% for cat in movie.category.all %}
+                                            <span>{{ cat.name }}</span>{% if not forloop.last %} • {% endif %}
+                                        {% empty %}
                                             <span>Movie</span>
-                                        {% endif %}
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>

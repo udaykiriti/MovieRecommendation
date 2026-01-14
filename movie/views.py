@@ -14,10 +14,10 @@ def movies(request):
     query = request.GET.get('q')
     if query:
         movies = Movie.objects.filter(
-            Q(title__icontains=query) | Q(category__icontains=query) | Q(cast__name__icontains=query)
+            Q(title__icontains=query) | Q(category__name__icontains=query) | Q(cast__name__icontains=query)
         ).distinct().order_by('-created')
     else:
-        movies = Movie.objects.all().prefetch_related('cast').order_by('-created')
+        movies = Movie.objects.all().prefetch_related('cast', 'category').order_by('-created')
 
     paginator = Paginator(movies, 12)
     page_number = request.GET.get('page')
@@ -199,7 +199,7 @@ def toggle_favorite(request, _id):
 
 
 def filter_by_category(request, category):
-    movies = Movie.objects.filter(category=category)
+    movies = Movie.objects.filter(category__name__iexact=category)
     paginator = Paginator(movies, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)

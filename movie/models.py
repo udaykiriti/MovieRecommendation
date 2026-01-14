@@ -24,13 +24,6 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
 
-CATEGORY_CHOICES = (
-    ('action','ACTION'),
-    ('drama','DRAMA'),
-    ('comedy','COMEDY'),
-    ('romance','ROMANCE'),
-)
-
 LANGUAGE_CHOICES = (
     ('english' , 'ENGLISH'),
     ('german' , 'GERMAN'),
@@ -61,7 +54,7 @@ class Movie(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to="movies")
     banner = models.ImageField(upload_to='movies_banner')
-    category = models.CharField(choices=CATEGORY_CHOICES, max_length=10)
+    category = models.ManyToManyField(Category, related_name='movies', blank=True)
     language = models.CharField(choices=LANGUAGE_CHOICES, max_length=10)
     status = models.CharField(choices=STATUS_CHOICES, max_length=2)
     cast = models.ManyToManyField(Actor, related_name='movies', blank=True)
