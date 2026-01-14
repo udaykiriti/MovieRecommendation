@@ -9,14 +9,13 @@ CACHE_TIMEOUT = 24 * 60 * 60  # 24 hours
 def get_recommendations(movie_id, total_results=6):
     """
     Returns a list of Movie objects similar to the given movie_id.
-    First checks the cache. If not found, computes on the fly (expensive).
+    First checks the cache. If not found, falls back to category-based suggestions.
     """
     cache_key = f"rec_movie_{movie_id}"
     cached_ids = cache.get(cache_key)
 
     if cached_ids is not None:
         # Fetch movies from DB to ensure they still exist and return actual objects
-        # We need to preserve order, so we can't just use filter(id__in=...) directly
         recommended_movies = []
         movies_dict = {m.id: m for m in Movie.objects.filter(id__in=cached_ids)}
         
@@ -25,9 +24,12 @@ def get_recommendations(movie_id, total_results=6):
                 recommended_movies.append(movies_dict[rid])
         return recommended_movies
 
-    # Fallback: Compute just for this movie (or trigger full update?)
-    # For now, we use the existing logic to compute on the fly if cache misses.
-    return _compute_single_recommendation(movie_id, total_results)
+    # Fallback: Simple Category Match (Fast)
+    try:
+        movie = Movie.objects.get(id=movie_id)
+        return list(Movie.objects.filter(category=movie.category).exclude(id=movie_id).order_by('-created')[:total_results])
+    except Movie.DoesNotExist:
+        return []
 
 
 def compute_all_recommendations():
@@ -100,61 +102,3 @@ def compute_all_recommendations():
             continue
             
     print(f"Successfully cached recommendations for {len(movies)} movies.")
-
-
-def _compute_single_recommendation(movie_id, total_results=6):
-    """
-    The original logic, extracted to run only when cache misses.
-    """
-    movies = Movie.objects.all()
-    if movies.count() < 3:
-        return list(Movie.objects.exclude(id=movie_id)[:total_results])
-
-    data = []
-    for m in movies:
-        cat_name = ""
-        if hasattr(m, 'category') and m.category:
-            if hasattr(m.category, 'name'):
-                cat_name = m.category.name
-            else:
-                cat_name = str(m.category)
-        
-        data.append({
-            'id': m.id,
-            'title': m.title,
-            'description': m.description,
-            'cast': m.cast,
-            'category': cat_name
-        })
-    
-    df = pd.DataFrame(data)
-
-    def combine_features(row):
-        return f"{row['title']} {row['category']} {row['cast']} {row['description']}"
-
-    df['combined_features'] = df.apply(combine_features, axis=1)
-
-    tfidf = TfidfVectorizer(stop_words='english')
-    tfidf_matrix = tfidf.fit_transform(df['combined_features'])
-    cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
-
-    try:
-        indices = pd.Series(df.index, index=df['id']).drop_duplicates()
-        idx = indices[movie_id]
-    except KeyError:
-        return []
-
-    sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    sim_scores = sim_scores[1:total_results+1]
-    movie_indices = [i[0] for i in sim_scores]
-
-    recommended_ids = df['id'].iloc[movie_indices].tolist()
-    
-    # Cache this result since we did the work anyway
-    cache.set(f"rec_movie_{movie_id}", recommended_ids, CACHE_TIMEOUT)
-
-    recommended_movies = list(Movie.objects.filter(id__in=recommended_ids))
-    recommended_movies.sort(key=lambda x: recommended_ids.index(x.id))
-    
-    return recommended_movies

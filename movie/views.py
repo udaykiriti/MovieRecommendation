@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, MovieLinks, Comment
 from .recommendations import get_recommendations
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, F
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -31,8 +31,10 @@ def movies(request):
 
 def movie_details(request, _id):
     movie = get_object_or_404(Movie, pk=_id)
+    # Atomic update for views_count
+    Movie.objects.filter(pk=_id).update(views_count=F('views_count') + 1)
+    # Update local instance to reflect the change in the template
     movie.views_count += 1
-    movie.save()
     
     links = MovieLinks.objects.filter(movie=movie)
     related_movies = get_recommendations(_id)

@@ -1,7 +1,7 @@
 from tabnanny import verbose
 from django.db import models
 from django.utils.text import slugify
-from datetime import datetime
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -56,7 +56,7 @@ class Movie(models.Model):
     year_of_production = models.DateField()
     views_count = models.IntegerField(default=0)
     movie_trailer = models.URLField()
-    created = models.DateTimeField(default=datetime.now)
+    created = models.DateTimeField(default=timezone.now)
     slug = models.SlugField(blank=True, null=True)
     tmdb_id = models.IntegerField(unique=True, blank=True, null=True)
     rating = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
