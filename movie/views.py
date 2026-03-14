@@ -70,7 +70,7 @@ def movie_details(request, _id):
 
 def tv_shows(request):
     try:
-        response = requests.get('http://api.tvmaze.com/shows')
+        response = requests.get('https://api.tvmaze.com/shows', timeout=10)
         response.raise_for_status()
         shows = response.json()
         # Sort by rating or popularity if possible, or just slice
@@ -249,4 +249,3 @@ def random_movie_data(request):
         }
     }
     return JsonResponse(data)
-
