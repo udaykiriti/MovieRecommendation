@@ -18,7 +18,7 @@ def fetch_tmdb_movie_details(tmdb_id):
     }
 
     try:
-        response = requests.get(f"{base_url}{tmdb_id}", params=params)
+        response = requests.get(f"{base_url}{tmdb_id}", params=params, timeout=10)
         response.raise_for_status()
         data = response.json()
         
@@ -52,7 +52,7 @@ def download_image(url):
     Downloads an image from a URL and returns a ContentFile.
     """
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
         return ContentFile(response.content, name=os.path.basename(url))
     except requests.RequestException:
@@ -70,7 +70,7 @@ def search_tmdb_movies(query):
     params = {'api_key': api_key, 'query': query}
 
     try:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
         return response.json().get('results', [])
     except requests.RequestException:
