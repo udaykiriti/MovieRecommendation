@@ -37,6 +37,9 @@ python manage.py runserver
 
 Open `http://127.0.0.1:8000/`.
 
+> [!TIP]
+> After adding or bulk-importing movies, run `python manage.py update_recommendations` to refresh cached related-movie results.
+
 ## Environment Variables
 
 Create `.env` (based on `.env.example`) with:
@@ -46,6 +49,9 @@ Create `.env` (based on `.env.example`) with:
 - `ALLOWED_HOSTS`
 - `TMDB_API_KEY`
 
+> [!NOTE]
+> Use `DEBUG=True` only in local development, and always set a strong `SECRET_KEY` for any shared/staging/production environment.
+
 ## Docker
 
 ```bash
@@ -53,6 +59,9 @@ docker compose up --build
 ```
 
 This runs migrations, collects static files, and starts Django on `0.0.0.0:8000`.
+
+> [!TIP]
+> If you change dependencies or Docker build steps, rebuild with `docker compose up --build` again.
 
 ## Useful Commands
 
@@ -67,6 +76,9 @@ python manage.py migrate
 python manage.py update_recommendations
 ```
 
+> [!NOTE]
+> Favorites/watchlist actions require authentication and are returned as HTMX-friendly partial responses.
+
 ## Project Layout
 
 - `imdb_project/`: Django project settings and root URL config
@@ -74,6 +86,9 @@ python manage.py update_recommendations
 - `templates/`: page templates and reusable partials
 - `static/`: CSS, JavaScript, images
 - `docs/`: detailed technical documentation
+
+> [!NOTE]
+> Scripts under `scripts/` are legacy migration helpers for older schema versions; review before reuse.
 
 ## Documentation
 
