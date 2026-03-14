@@ -54,14 +54,42 @@ function openTrailer(url) {
         showToast("No trailer available.", "error");
         return;
     }
-    // Convert watch URL to embed if necessary (simple check)
-    if (url.includes('youtube.com/watch?v=')) {
-        url = url.replace('watch?v=', 'embed/');
-    } else if (url.includes('youtu.be/')) {
-        url = url.replace('youtu.be/', 'youtube.com/embed/');
+
+    let parsedUrl;
+    try {
+        parsedUrl = new URL(url, window.location.origin);
+    } catch (e) {
+        showToast("Invalid trailer URL.", "error");
+        return;
     }
-    
-    $('#trailerFrame').attr('src', url + "?autoplay=1");
+
+    const host = parsedUrl.hostname.replace(/^www\./, '');
+    const isYoutube = host === 'youtube.com' || host === 'youtu.be';
+    if (!isYoutube) {
+        showToast("Unsupported trailer source.", "error");
+        return;
+    }
+
+    // Convert watch/share URL to embed URL.
+    if (host === 'youtube.com' && parsedUrl.pathname === '/watch') {
+        const videoId = parsedUrl.searchParams.get('v');
+        if (!videoId) {
+            showToast("Invalid trailer URL.", "error");
+            return;
+        }
+        url = `https://www.youtube.com/embed/${videoId}`;
+    } else if (host === 'youtu.be') {
+        const videoId = parsedUrl.pathname.replace('/', '');
+        if (!videoId) {
+            showToast("Invalid trailer URL.", "error");
+            return;
+        }
+        url = `https://www.youtube.com/embed/${videoId}`;
+    } else {
+        url = parsedUrl.toString();
+    }
+
+    $('#trailerFrame').attr('src', `${url}?autoplay=1`);
     $('#trailerModal').fadeIn().css('display', 'flex');
 }
 
