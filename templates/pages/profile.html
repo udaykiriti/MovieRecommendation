@@ -94,8 +94,8 @@
 
         <!-- Dynamic Tabs for Content -->
         <div class="profile-tabs-nav">
-            <div class="tab-link active" onclick="switchTab('watchlist')">Watchlist</div>
-            <div class="tab-link" onclick="switchTab('favorites')">Favorites</div>
+            <div class="tab-link active" onclick="switchTab('watchlist', this)">Watchlist</div>
+            <div class="tab-link" onclick="switchTab('favorites', this)">Favorites</div>
         </div>
 
         <!-- Watchlist Tab -->
@@ -147,7 +147,7 @@
 </div>
 
 <script>
-function switchTab(tabName) {
+function switchTab(tabName, el) {
     // Hide all contents
     document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
     // Remove active class from all links
@@ -156,7 +156,7 @@ function switchTab(tabName) {
     // Show selected content
     document.getElementById(tabName + '-tab').style.display = 'block';
     // Add active class to clicked link
-    event.currentTarget.classList.add('active');
+    el.classList.add('active');
 }
 </script>
 {% endblock %}
