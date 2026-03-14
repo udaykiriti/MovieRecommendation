@@ -129,6 +129,9 @@ def profile_view(request):
 def public_profile(request, username):
     from django.contrib.auth.models import User
     user = get_object_or_404(User, username=username)
+    if not hasattr(user, 'profile'):
+        from .models import Profile
+        Profile.objects.create(user=user)
     return render(request, "pages/public_profile.html", {'profile_user': user})
 
 @require_POST
