@@ -55,7 +55,7 @@ class MovieViewsTest(TestCase):
     def test_toggle_favorite_creates_profile(self):
         """Test that toggle_favorite creates a profile if missing"""
         self.client.login(username='noprofile', password='password')
-        response = self.client.get(reverse('movie:toggle_favorite', args=[self.movie.id]))
+        response = self.client.post(reverse('movie:toggle_favorite', args=[self.movie.id]))
         self.assertEqual(response.status_code, 200)
         self.user_no_profile.refresh_from_db()
         self.assertTrue(hasattr(self.user_no_profile, 'profile'))
