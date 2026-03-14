@@ -21,7 +21,7 @@
                     </div>
                     <div class="mov-content">
                         <div class="mov-actions">
-                            <a href="{{ show.url }}" target="_blank" class="icon-btn play" title="Play">
+                            <a href="{{ show.url }}" target="_blank" rel="noopener noreferrer" class="icon-btn play" title="Play">
                                 <span class="material-icons-round">play_arrow</span>
                             </a>
                             <button class="icon-btn add" title="Add to List">
@@ -30,7 +30,7 @@
                             <button class="icon-btn like" title="Like">
                                 <span class="material-icons-round">thumb_up_off_alt</span>
                             </button>
-                            <a href="{{ show.url }}" target="_blank" class="icon-btn more" title="More Info">
+                            <a href="{{ show.url }}" target="_blank" rel="noopener noreferrer" class="icon-btn more" title="More Info">
                                 <span class="material-icons-round">keyboard_arrow_down</span>
                             </a>
                         </div>
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <!-- Full card link fallback -->
-                    <a href="{{ show.url }}" target="_blank" class="mov-link-overlay"></a>
+                    <a href="{{ show.url }}" target="_blank" rel="noopener noreferrer" class="mov-link-overlay"></a>
                 </div>
             {% empty %}
                 <div class="empty-state">
@@ -61,7 +61,7 @@
         </div>
         
         <div class="pagination" style="margin-top: 50px; text-align: center;">
-            <a href="https://www.tvmaze.com/" target="_blank" class="cool-btn">View More on TVmaze</a>
+            <a href="https://www.tvmaze.com/" target="_blank" rel="noopener noreferrer" class="cool-btn">View More on TVmaze</a>
         </div>
     </section>
 </main>

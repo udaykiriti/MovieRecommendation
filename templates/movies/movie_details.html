@@ -72,7 +72,7 @@
                             <div class="link-label">Download:</div>
                             {% for link in links %}
                                 {% if link.link_type == "D" %}
-                                    <a href="{{link.link}}" target="_blank" class="link-btn download">Download Link {{forloop.counter}}</a>
+                                    <a href="{{link.link}}" target="_blank" rel="noopener noreferrer" class="link-btn download">Download Link {{forloop.counter}}</a>
                                 {% endif %}
                             {% endfor %}
                             <div class="clear-fix"></div>
@@ -82,7 +82,7 @@
                             <div class="link-label">Watch:</div>
                             {% for link in links %}
                                 {% if link.link_type == "W" %}
-                                    <a href="{{link.link}}" target="_blank" class="link-btn watch">Watch Link {{forloop.counter}}</a>
+                                    <a href="{{link.link}}" target="_blank" rel="noopener noreferrer" class="link-btn watch">Watch Link {{forloop.counter}}</a>
                                 {% endif %}
                             {% endfor %}
                             <div class="clear-fix"></div>
