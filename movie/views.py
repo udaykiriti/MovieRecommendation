@@ -8,6 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 import requests
 
 def movies(request):
@@ -27,7 +28,18 @@ def movies(request):
     if not slider_movies:
         slider_movies = Movie.objects.all().order_by('-created')[:5]
     
-    return render(request, "movies/movie_list.html", {'page_obj': page_obj, 'slider_movies': slider_movies})
+    favorite_ids = []
+    watchlist_ids = []
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        favorite_ids = list(request.user.profile.favorites.values_list('id', flat=True))
+        watchlist_ids = list(request.user.profile.watchlist.values_list('id', flat=True))
+
+    return render(request, "movies/movie_list.html", {
+        'page_obj': page_obj,
+        'slider_movies': slider_movies,
+        'favorite_ids': favorite_ids,
+        'watchlist_ids': watchlist_ids,
+    })
 
 def movie_details(request, _id):
     movie = get_object_or_404(Movie, pk=_id)
@@ -113,6 +125,7 @@ def public_profile(request, username):
     user = get_object_or_404(User, username=username)
     return render(request, "pages/public_profile.html", {'profile_user': user})
 
+@require_POST
 def toggle_watchlist(request, _id):
     if not request.user.is_authenticated:
         from django.http import HttpResponse
@@ -171,6 +184,7 @@ def logout_view(request):
     messages.info(request, "Logged out successfully.")
     return redirect('movie:movie')
 
+@require_POST
 def toggle_favorite(request, _id):
     if not request.user.is_authenticated:
         # If not logged in, we can't toggle.
@@ -205,8 +219,17 @@ def filter_by_category(request, category):
     paginator = Paginator(movies, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+
+    favorite_ids = []
+    watchlist_ids = []
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        favorite_ids = list(request.user.profile.favorites.values_list('id', flat=True))
+        watchlist_ids = list(request.user.profile.watchlist.values_list('id', flat=True))
+
     return render(request, "movies/movie_list.html", context={
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "favorite_ids": favorite_ids,
+        "watchlist_ids": watchlist_ids,
     })
 
 
@@ -215,8 +238,17 @@ def filter_by_language(request, language):
     paginator = Paginator(movies, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+
+    favorite_ids = []
+    watchlist_ids = []
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        favorite_ids = list(request.user.profile.favorites.values_list('id', flat=True))
+        watchlist_ids = list(request.user.profile.watchlist.values_list('id', flat=True))
+
     return render(request, "movies/movie_list.html", context={
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "favorite_ids": favorite_ids,
+        "watchlist_ids": watchlist_ids,
     })
 
 def search_results(request):

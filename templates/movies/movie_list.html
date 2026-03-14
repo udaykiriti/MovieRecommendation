@@ -34,7 +34,11 @@
                                             hx-target="this"
                                             hx-swap="innerHTML"
                                             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-                                        {% include 'partials/watchlist_icon.html' %}
+                                        {% if movie.id in watchlist_ids %}
+                                            <span class="material-icons-round" style="color: var(--success-color);">playlist_add_check</span>
+                                        {% else %}
+                                            <span class="material-icons-round">playlist_add</span>
+                                        {% endif %}
                                     </button>
                                     <button class="icon-btn like" 
                                             title="Like"
@@ -43,7 +47,11 @@
                                             hx-target="this"
                                             hx-swap="innerHTML"
                                             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-                                        {% include 'partials/favorite_icon.html' %}
+                                        {% if movie.id in favorite_ids %}
+                                            <span class="material-icons-round" style="color: #ff4d4d;">favorite</span>
+                                        {% else %}
+                                            <span class="material-icons-round">favorite_border</span>
+                                        {% endif %}
                                     </button>
                                     <a href="{% url 'movie:movie_details' movie.id %}" class="icon-btn more" title="More Info">
                                         <span class="material-icons-round">keyboard_arrow_down</span>
