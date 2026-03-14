@@ -2,8 +2,6 @@
 
 A modern, feature-rich movie recommendation platform built with Django. **GrandLine Cinema** offers a sleek, "Netflix-style" browsing experience, complete with an immersive hero slider, real-time interactions, and personalized user profiles.
 
-![GrandLine Cinema](static/img/logo.svg)
-
 ## Key Features
 
 ### Immersive UI/UX
