@@ -63,8 +63,12 @@ def movie_details(request, _id):
     
     is_favorited = False
     is_watchlisted = False
+    favorite_ids = []
+    watchlist_ids = []
     if request.user.is_authenticated:
         if hasattr(request.user, 'profile'):
+            favorite_ids = list(request.user.profile.favorites.values_list('id', flat=True))
+            watchlist_ids = list(request.user.profile.watchlist.values_list('id', flat=True))
             if request.user.profile.favorites.filter(pk=_id).exists():
                 is_favorited = True
             if request.user.profile.watchlist.filter(pk=_id).exists():
@@ -77,6 +81,8 @@ def movie_details(request, _id):
         'comments': comments,
         'is_favorited': is_favorited,
         'is_watchlisted': is_watchlisted,
+        'favorite_ids': favorite_ids,
+        'watchlist_ids': watchlist_ids,
     }
     return render(request, "movies/movie_details.html", context)
 
